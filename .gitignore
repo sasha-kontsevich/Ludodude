@@ -113,5 +113,6 @@ Desktop.ini
 .plastic/
 
 # Local VS Code / Cursor (uncomment if you do not share workspace settings in repo)
- /.vscode/
+ /.vscode
  /.cursor/
+.vscode/*.json
