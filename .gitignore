@@ -99,3 +99,19 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# --- OS & local junk ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+
+# Plastic SCM (if the project ever uses it)
+.plastic/
+
+# Local VS Code / Cursor (uncomment if you do not share workspace settings in repo)
+# /.vscode/
+# /.cursor/
