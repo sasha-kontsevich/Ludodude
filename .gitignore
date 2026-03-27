@@ -116,3 +116,5 @@ Desktop.ini
  /.vscode
  /.cursor/
 .vscode/*.json
+
+.DS_Store
