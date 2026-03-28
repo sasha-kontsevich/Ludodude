@@ -898,7 +898,7 @@ MonoBehaviour:
   zoneTrigger: {fileID: 208014597358884561}
   panelPresenter: {fileID: 0}
   showPanelOnEnter: 0
-  hidePanelOnExit: 1
+  hidePanelOnExit: 0
   openByInteract: 1
   togglePanelByInteract: 1
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
