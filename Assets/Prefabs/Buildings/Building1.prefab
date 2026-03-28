@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3031308072245807381}
+  - {fileID: 7834442644988183030}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8002449118571519480
@@ -154,12 +155,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Building
   doorTrigger: {fileID: 4985758648652128013}
   interiorPrefab: {fileID: 0}
+  exteriorSpawnPoint: {fileID: 7834442644988183030}
   useManualInteriorPosition: 0
   manualInteriorSpawnPosition: {x: 0, y: 0}
   fallbackRegionAnchor: {x: 50000, y: 50000}
   fallbackGridColumns: 32
   fallbackCellSize: 2048
-  interiorEntranceChildName: 
+--- !u!1 &3516177396595083581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7834442644988183030}
+  m_Layer: 0
+  m_Name: Exit Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7834442644988183030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3516177396595083581}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.783, y: -0.087, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2553322386555861141}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3737224822484167871
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +219,7 @@ Transform:
   m_GameObject: {fileID: 3737224822484167871}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.545, y: -0.02, z: 0}
+  m_LocalPosition: {x: 0.49, y: -0.02, z: 0}
   m_LocalScale: {x: 0.21, y: 0.29, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

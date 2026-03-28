@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Здание: спавнит префаб интерьера далеко от карты и телепортирует игрока при входе в коллайдер двери.
@@ -8,6 +9,10 @@ public class Building : MonoBehaviour
 {
     [SerializeField] private Collider2D doorTrigger;
     [SerializeField] private GameObject interiorPrefab;
+
+    [Tooltip("Точка появления игрока снаружи после выхода из интерьера. Пусто — позиция doorTrigger.")]
+    [FormerlySerializedAs("exteriorReturnPoint")]
+    [SerializeField] private Transform exteriorSpawnPoint;
 
     [Tooltip("Если задано — позиция интерьера вручную. Иначе слот выдаётся автоматически (сетка далеко от центра карты).")]
     [SerializeField] private bool useManualInteriorPosition;
@@ -19,9 +24,6 @@ public class Building : MonoBehaviour
 
     [SerializeField] private int fallbackGridColumns = 32;
     [SerializeField] private float fallbackCellSize = 2048f;
-
-    [Tooltip("Имя дочернего объекта в префабе — куда телепортировать игрока. Пусто = корень префаба.")]
-    [SerializeField] private string interiorEntranceChildName;
 
     private GameObject _interiorInstance;
     private Transform _teleportDestination;
@@ -72,7 +74,19 @@ public class Building : MonoBehaviour
         }
 
         _interiorInstance = Instantiate(interiorPrefab, spawnPos, Quaternion.identity);
-        _teleportDestination = ResolveEntrance(_interiorInstance.transform);
+
+        var interior = _interiorInstance.GetComponentInChildren<Interior>();
+        if (interior != null)
+        {
+            _teleportDestination = interior.GetPlayerSpawnPoint();
+            Transform outside = exteriorSpawnPoint != null ? exteriorSpawnPoint : doorTrigger.transform;
+            interior.Bind(outside);
+        }
+        else
+        {
+            _teleportDestination = _interiorInstance.transform;
+            Debug.LogWarning("Building: в префабе интерьера нет Interior — телепорт внутрь на корень префаба.", this);
+        }
     }
 
     private void OnDestroy()
@@ -104,37 +118,6 @@ public class Building : MonoBehaviour
 
         rb.position = _teleportDestination.position;
         rb.linearVelocity = Vector2.zero;
-    }
-
-    private Transform ResolveEntrance(Transform interiorRoot)
-    {
-        if (string.IsNullOrEmpty(interiorEntranceChildName))
-            return interiorRoot;
-
-        Transform found = FindChildByName(interiorRoot, interiorEntranceChildName);
-        if (found == null)
-        {
-            Debug.LogWarning($"Building: в префабе не найден объект «{interiorEntranceChildName}», используется корень.", this);
-            return interiorRoot;
-        }
-
-        return found;
-    }
-
-    private static Transform FindChildByName(Transform parent, string name)
-    {
-        if (parent.name == name)
-            return parent;
-
-        for (int i = 0; i < parent.childCount; i++)
-        {
-            Transform child = parent.GetChild(i);
-            Transform found = FindChildByName(child, name);
-            if (found != null)
-                return found;
-        }
-
-        return null;
     }
 }
 
