@@ -1,44 +1,37 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum VillagerPursuitEndAction
-{
-    DestroySelf,
-    ReturnToSpawn
-}
-
+/// <summary>
+/// Полиция: преследует игрока по NavMesh, только пока игрок несёт хотя бы один предмет (<see cref="ItemCarrier"/>).
+/// Радиуса «агро» нет — условие одно: предмет в руках (и игрок не в укрытии).
+/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
-public class VillagerAI : MonoBehaviour
+public class PoliceChaseAI : MonoBehaviour
 {
-    [Header("Обнаружение")]
-    [Tooltip("Житель начинает преследование, только если игрок подошёл не ближе этого.")]
-    public float detectionDistance = 5f;
-
     [Header("Преследование")]
     [Tooltip("Скорость NavMesh Agent при преследовании (юниты/с).")]
-    [SerializeField] [Min(0.01f)] private float chaseSpeed = 4f;
+    [SerializeField] [Min(0.01f)] private float chaseSpeed = 4.5f;
 
-    [Tooltip("High — плавнее к касательной пути. No — резче, сильнее занос.")]
+    [Tooltip("High — штатное поведение Unity (плавнее повороты к пути). No — резче к цели, но сильнее «занос».")]
     [SerializeField] private ObstacleAvoidanceType obstacleAvoidance = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
 
-    [SerializeField] [Min(1f)] private float chaseAcceleration = 24f;
+    [SerializeField] [Min(1f)] private float chaseAcceleration = 28f;
 
     [SerializeField] [Min(1f)] private float chaseAngularSpeed = 540f;
 
-    [Tooltip("Считается, что житель догнал игрока (конец эпизода преследования).")]
+    [Tooltip("Считается догон (конец эпизода).")]
     public float catchDistance = 0.65f;
 
     public float chaseStoppingDistance = 0.35f;
 
-    [Header("После догона или укрытия игрока")]
+    [Header("После догона или укрытия")]
     public VillagerPursuitEndAction pursuitEndAction = VillagerPursuitEndAction.ReturnToSpawn;
 
-    [Tooltip("Точка «дома» жителя: туда его телепортирует после догона / укрытия игрока. Пусто — позиция при старте сцены.")]
+    [Tooltip("Точка возврата после погони. Пусто — позиция при старте сцены.")]
     [SerializeField] private Transform spawnPoint;
 
     [Header("Отладка")]
-    [Tooltip("Сообщения в Console: старт, обнаружение, конец преследования и причина.")]
-    [SerializeField] private bool debugLog = true;
+    [SerializeField] private bool debugLog;
 
     public bool IsChasing => _phase == PursuitPhase.Chasing;
 
@@ -75,10 +68,12 @@ public class VillagerAI : MonoBehaviour
 
         if (debugLog)
         {
-            if (_player != null)
-                Log($"Старт: игрок найден (тег Player), спавн {_spawnPosition}");
+            if (_player == null)
+                LogWarning("Старт: объект с тегом Player не найден.");
+            else if (_playerCarrier == null)
+                LogWarning("Старт: у игрока нет ItemCarrier — условие «несёт предмет» не сработает.");
             else
-                LogWarning("Старт: объект с тегом Player не найден — преследование не начнётся.");
+                Log($"Старт: игрок и ItemCarrier найдены, спавн {_spawnPosition}");
         }
     }
 
@@ -100,9 +95,10 @@ public class VillagerAI : MonoBehaviour
         if (_player == null || !PlayerOutOfShelter())
             return;
 
-        float dist = Vector3.Distance(transform.position, _player.position);
-        if (dist <= detectionDistance)
-            BeginChase();
+        if (!HasLoot())
+            return;
+
+        BeginChase();
     }
 
     private void UpdateChasing()
@@ -119,6 +115,12 @@ public class VillagerAI : MonoBehaviour
             return;
         }
 
+        if (!HasLoot())
+        {
+            EndPursuit("игрок перестал нести предмет");
+            return;
+        }
+
         float dist = Vector3.Distance(transform.position, _player.position);
         if (dist <= catchDistance)
         {
@@ -132,10 +134,16 @@ public class VillagerAI : MonoBehaviour
         _agent.SetDestination(_player.position);
     }
 
+    // В руках есть хотя бы один предмет (ItemCarrier).
+    private bool HasLoot()
+    {
+        return _playerCarrier != null && _playerCarrier.CarriedItems.Count > 0;
+    }
+
     private void BeginChase()
     {
         float dist = _player != null ? Vector3.Distance(transform.position, _player.position) : -1f;
-        Log($"Начало преследования: расстояние до игрока {dist:F2}, detectionDistance={detectionDistance}");
+        Log($"Начало погони: игрок с предметом, дистанция до цели {dist:F2}");
 
         _phase = PursuitPhase.Chasing;
         _agent.isStopped = false;
@@ -143,7 +151,7 @@ public class VillagerAI : MonoBehaviour
 
     private void EndPursuit(string reason)
     {
-        Log($"Конец преследования: {reason}");
+        Log($"Конец погони: {reason}");
 
         if (pursuitEndAction == VillagerPursuitEndAction.DestroySelf)
         {
@@ -175,13 +183,13 @@ public class VillagerAI : MonoBehaviour
     private void Log(string message)
     {
         if (debugLog)
-            Debug.Log($"[VillagerAI] {name}: {message}", this);
+            Debug.Log($"[PoliceChaseAI] {name}: {message}", this);
     }
 
     private void LogWarning(string message)
     {
         if (debugLog)
-            Debug.LogWarning($"[VillagerAI] {name}: {message}", this);
+            Debug.LogWarning($"[PoliceChaseAI] {name}: {message}", this);
     }
 
     // Игрок найден и не в укрытии — можно детектить и преследовать.
