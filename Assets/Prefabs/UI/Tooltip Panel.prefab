@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParceTooltip
   textValue: {fileID: 2615969960234394686}
-  transpSpeed: 0.2
+  transpSpeed: 0.8
 --- !u!225 &9208707371366587284
 CanvasGroup:
   m_ObjectHideFlags: 0
