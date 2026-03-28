@@ -225,6 +225,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 377035926}
     m_Modifications:
+    - target: {fileID: 1770371326877110453, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
+      propertyPath: interiorPrefab
+      value: 
+      objectReference: {fileID: 6157239622568531310, guid: b0c1c1b5039f77a44aae9de28ea0f0c4, type: 3}
     - target: {fileID: 2168728511868947136, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
       propertyPath: m_Name
       value: Building1 (1)
@@ -610,6 +614,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 377035926}
     m_Modifications:
+    - target: {fileID: 1770371326877110453, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
+      propertyPath: interiorPrefab
+      value: 
+      objectReference: {fileID: 6157239622568531310, guid: b0c1c1b5039f77a44aae9de28ea0f0c4, type: 3}
     - target: {fileID: 2168728511868947136, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
       propertyPath: m_Name
       value: Building1 (2)
@@ -667,6 +675,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 377035926}
     m_Modifications:
+    - target: {fileID: 1770371326877110453, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
+      propertyPath: interiorPrefab
+      value: 
+      objectReference: {fileID: 6157239622568531310, guid: b0c1c1b5039f77a44aae9de28ea0f0c4, type: 3}
     - target: {fileID: 2168728511868947136, guid: 20e50cd2b1fe12848b2b75e51a41f9a2, type: 3}
       propertyPath: m_Name
       value: Building1 (3)
