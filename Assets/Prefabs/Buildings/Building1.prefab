@@ -156,11 +156,7 @@ MonoBehaviour:
   interiorPrefab: {fileID: 0}
   useManualInteriorPosition: 0
   manualInteriorSpawnPosition: {x: 0, y: 0}
-<<<<<<< Updated upstream
   fallbackRegionAnchor: {x: 50000, y: 50000}
-=======
-  fallbackRegionAnchor: {x: -70, y: 0}
->>>>>>> Stashed changes
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   interiorEntranceChildName: 
