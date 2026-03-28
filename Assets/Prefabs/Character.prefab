@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 5980552836062809012}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -354,6 +354,11 @@ MonoBehaviour:
   dropOffset: {x: 0, y: -0.45}
   carriedItemWorldHeight: 1
   stackSpacingFactor: 0.52
+  pickupArcDuration: 0.35
+  pickupArcHeight: 0.35
   wobbleFrequency: 10
   wobblePositionAmplitude: 0.2
   wobbleFullSpeed: 0.4
+  pickupTooltipEnabled: 1
+  pickupTooltipTemplate: "\u041F\u043E\u0434\u043E\u0431\u0440\u0430\u0442\u044C:
+    {0} (\u0441\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C: {1})"
