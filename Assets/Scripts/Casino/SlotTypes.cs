@@ -46,4 +46,7 @@ public sealed class SpinResult
     public float PayoutAmount;
     public float BalanceBefore;
     public float BalanceAfter;
+    public int LevelBefore;
+    public int LevelAfter;
+    public float MinBetForLevel;
 }

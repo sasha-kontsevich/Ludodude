@@ -72,8 +72,22 @@ public class SlotMachineConfig : ScriptableObject
 
     public float GetBetAmountByNormalized(float normalized)
     {
+        return GetBetAmountByNormalized(normalized, 0);
+    }
+
+    public float GetMinBetForLevel(int level)
+    {
+        int safeLevel = Mathf.Max(0, level);
+        float multiplier = Mathf.Pow(2f, safeLevel);
+        return MinBet * multiplier;
+    }
+
+    public float GetBetAmountByNormalized(float normalized, int level)
+    {
         float t = Mathf.Clamp01(normalized);
-        return Mathf.Lerp(MinBet, MaxBet, t);
+        float minForLevel = GetMinBetForLevel(level);
+        float maxForLevel = Mathf.Max(minForLevel, MaxBet);
+        return Mathf.Lerp(minForLevel, maxForLevel, t);
     }
 
     public bool TryGetPayoutMultiplier(SlotSymbolId symbol, out float multiplier)

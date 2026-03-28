@@ -45,6 +45,9 @@ public class GamblingMachineTests
         Assert.AreEqual(100f, result.BalanceBefore, 0.001f);
         Assert.Greater(result.BalanceAfter, 90f);
         Assert.AreEqual(result.BalanceAfter, gm.CasinoDeposit, 0.001f);
+        Assert.AreEqual(0, result.LevelBefore);
+        Assert.AreEqual(1, result.LevelAfter);
+        Assert.AreEqual(5f, result.MinBetForLevel, 0.001f);
         Object.DestroyImmediate(config);
     }
 
@@ -62,6 +65,52 @@ public class GamblingMachineTests
         Assert.AreEqual(0f, result.PayoutAmount, 0.001f);
         Assert.AreEqual(90f, result.BalanceAfter, 0.001f);
         Assert.AreEqual(90f, gm.CasinoDeposit, 0.001f);
+        Assert.AreEqual(1, controller.CurrentLevel);
+        Object.DestroyImmediate(config);
+    }
+
+    [Test]
+    public void TrySpin_IncreasesMinBetByPowerOfTwoAfterEachSuccessfulSpin()
+    {
+        var config = CreateConfig(victoryChance: 0f, minBet: 5f, maxBet: 1_000_000f);
+        var gm = CreateGameManager(1_000f);
+        var controller = CreateController(config);
+
+        Assert.AreEqual(0, controller.CurrentLevel);
+        Assert.AreEqual(5f, controller.CurrentMinBet, 0.001f);
+
+        SpinResult first = controller.TrySpin(5f, forcedSeed: 11);
+        Assert.IsTrue(first.IsSuccess);
+        Assert.AreEqual(1, controller.CurrentLevel);
+        Assert.AreEqual(10f, controller.CurrentMinBet, 0.001f);
+
+        SpinResult second = controller.TrySpin(10f, forcedSeed: 12);
+        Assert.IsTrue(second.IsSuccess);
+        Assert.AreEqual(2, controller.CurrentLevel);
+        Assert.AreEqual(20f, controller.CurrentMinBet, 0.001f);
+
+        Object.DestroyImmediate(config);
+    }
+
+    [Test]
+    public void TrySpin_ReturnsInvalidBet_WhenBetBelowCurrentLevelMinimum()
+    {
+        var config = CreateConfig(victoryChance: 0f, minBet: 5f, maxBet: 1_000_000f);
+        var gm = CreateGameManager(1_000f);
+        var controller = CreateController(config);
+
+        SpinResult first = controller.TrySpin(5f, forcedSeed: 21);
+        Assert.IsTrue(first.IsSuccess);
+        Assert.AreEqual(1, controller.CurrentLevel);
+        Assert.AreEqual(10f, controller.CurrentMinBet, 0.001f);
+
+        SpinResult invalid = controller.TrySpin(9f, forcedSeed: 22);
+        Assert.IsFalse(invalid.IsSuccess);
+        Assert.AreEqual(SpinFailureReason.InvalidBet, invalid.FailureReason);
+        Assert.AreEqual(1, invalid.LevelBefore);
+        Assert.AreEqual(1, invalid.LevelAfter);
+        Assert.AreEqual(10f, invalid.MinBetForLevel, 0.001f);
+
         Object.DestroyImmediate(config);
     }
 

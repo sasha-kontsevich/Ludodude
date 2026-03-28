@@ -13,6 +13,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private TMP_Text outcomeLabel;
     [SerializeField] private TMP_Text symbolsLabel;
     [SerializeField] private TMP_Text balanceLabel;
+    [SerializeField] private TMP_Text levelLabel;
 
     [SerializeField] private string betFormat = "Bet: {0:0.##}";
     [SerializeField] private string balanceFormat = "Balance: {0:0.##}";
@@ -48,6 +49,9 @@ public class SlotMachinePanelPresenter : MonoBehaviour
 
         if (balanceLabel != null && GameManager.Instance != null)
             balanceLabel.text = string.Format(balanceFormat, GameManager.Instance.CasinoDeposit);
+
+        if (levelLabel != null)
+            levelLabel.text = $"Level: {machineController.CurrentLevel} | Min bet: {machineController.CurrentMinBet:0.##}";
     }
 
     // Hook this to a button onClick in UI.
