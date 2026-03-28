@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 public class EscapeMenu : MonoBehaviour
 {
     public string mainSceneName;
+    
     public void Leave()
     {
         Debug.Log("Выход..."); 
@@ -13,6 +14,7 @@ public class EscapeMenu : MonoBehaviour
     // Вызываем этот метод при нажатии на кнопку
     public void Resume()
     {
-        //Hide menu
+        GameObject thisObject = transform.gameObject;
+        thisObject.SetActive(!thisObject.activeSelf);
     }
 }
