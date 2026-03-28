@@ -254,45 +254,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4371895371475031577, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 453216849}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
---- !u!1 &453216847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4371895371475031577, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
-  m_PrefabInstance: {fileID: 86997262}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &453216849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453216847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1dd6e0523fb5244aa85f0e034c57804, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraController
-  brain: {fileID: 453216851}
-  defaultConfiner: {fileID: 1129727986}
-  persistBetweenScenes: 0
-  setBrainDefaultBlendToCutOnAwake: 0
-  skipWarpOnInteriorTeleport: 0
-  hardSnapFramesAfterTeleport: 3
---- !u!114 &453216851 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3399178279543187189, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
-  m_PrefabInstance: {fileID: 86997262}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453216847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
 --- !u!1 &530152724
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,17 +521,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1129727986 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6804523224354513395, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
-  m_PrefabInstance: {fileID: 86997262}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineConfiner2D
 --- !u!1001 &1388037626
 PrefabInstance:
   m_ObjectHideFlags: 0
