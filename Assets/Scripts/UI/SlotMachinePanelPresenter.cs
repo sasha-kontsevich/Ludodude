@@ -5,8 +5,11 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SlotMachinePanelPresenter : MonoBehaviour
 {
+    public static SlotMachinePanelPresenter Instance { get; private set; }
+
     [SerializeField] private GamblingMachineController machineController;
     [SerializeField] private UIDragging betDrag;
+    [SerializeField] private GameObject panelRoot;
 
     [Header("Optional UI labels")]
     [SerializeField] private TMP_Text betLabel;
@@ -20,10 +23,26 @@ public class SlotMachinePanelPresenter : MonoBehaviour
 
     private readonly StringBuilder _symbolsBuilder = new StringBuilder(64);
 
+    public GamblingMachineController CurrentMachine => machineController;
+
     private void Awake()
     {
-        if (machineController == null)
-            machineController = FindObjectOfType<GamblingMachineController>();
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("Multiple SlotMachinePanelPresenter instances found. Keeping the first one.", this);
+            return;
+        }
+
+        Instance = this;
+
+        if (panelRoot == null)
+            panelRoot = gameObject;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 
     private void OnEnable()
@@ -36,6 +55,53 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     {
         if (machineController != null)
             machineController.OnSpinCompleted -= OnSpinCompleted;
+    }
+
+    public void BindMachine(GamblingMachineController machine, bool clearResult = true)
+    {
+        if (machineController == machine)
+            return;
+
+        if (machineController != null)
+            machineController.OnSpinCompleted -= OnSpinCompleted;
+
+        machineController = machine;
+
+        if (machineController != null && isActiveAndEnabled)
+            machineController.OnSpinCompleted += OnSpinCompleted;
+
+        if (clearResult)
+            ClearResultLabels();
+    }
+
+    public void UnbindMachine(bool clearResult = true)
+    {
+        if (machineController != null)
+            machineController.OnSpinCompleted -= OnSpinCompleted;
+
+        machineController = null;
+
+        if (clearResult)
+            ClearResultLabels();
+    }
+
+    public bool IsBoundTo(GamblingMachineController machine)
+    {
+        return machineController == machine;
+    }
+
+    public void ShowPanel()
+    {
+        EnsurePanelRoot();
+        if (panelRoot != null)
+            panelRoot.SetActive(true);
+    }
+
+    public void HidePanel()
+    {
+        EnsurePanelRoot();
+        if (panelRoot != null)
+            panelRoot.SetActive(false);
     }
 
     private void Update()
@@ -109,5 +175,20 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         }
 
         return _symbolsBuilder.ToString();
+    }
+
+    private void ClearResultLabels()
+    {
+        if (outcomeLabel != null)
+            outcomeLabel.text = string.Empty;
+
+        if (symbolsLabel != null)
+            symbolsLabel.text = string.Empty;
+    }
+
+    private void EnsurePanelRoot()
+    {
+        if (panelRoot == null)
+            panelRoot = gameObject;
     }
 }
