@@ -274,7 +274,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2273552549511816526, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1838504547}
   m_SourcePrefab: {fileID: 100100000, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
 --- !u!1001 &256516174
 PrefabInstance:
@@ -810,6 +813,27 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c26d73309afd4aa418a4b6fe66c664ca, type: 3}
+--- !u!1 &1838504542 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2273552549511816526, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
+  m_PrefabInstance: {fileID: 86997262}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1838504547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838504542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46473933f25b94b4fb5bc246bb32fa52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  cost: 1000
+  pickupOutlineColor: {r: 0.95, g: 0.85, b: 0.2, a: 1}
+  pickupOutlineWidth: 0.04
+  pickupOutlinePadding: 0.02
 --- !u!1001 &4199869520043556498
 PrefabInstance:
   m_ObjectHideFlags: 0

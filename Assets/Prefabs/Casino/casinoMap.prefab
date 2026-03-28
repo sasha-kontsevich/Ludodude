@@ -7141,6 +7141,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CasinoBank
       objectReference: {fileID: 0}
+    - target: {fileID: 4829103746582910473, guid: 7ca14d06650ba1a4ea4d27af7bd74f45, type: 3}
+      propertyPath: showAtLeastOneIfAnyDeposit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4829103746582910473, guid: 7ca14d06650ba1a4ea4d27af7bd74f45, type: 3}
+      propertyPath: clearExistingChildrenOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7456052358765666431, guid: 7ca14d06650ba1a4ea4d27af7bd74f45, type: 3}
       propertyPath: m_SortingOrder
       value: 29
