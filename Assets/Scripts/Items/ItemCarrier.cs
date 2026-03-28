@@ -39,6 +39,12 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("Скорость носителя, при которой покачивание максимальное (м/с).")]
     [SerializeField] private float wobbleFullSpeed = 2.2f;
 
+    [Header("Подсказка при подборе")]
+    [SerializeField] private bool pickupTooltipEnabled = true;
+
+    [Tooltip("{0} — имя объекта, {1} — стоимость (Item.Cost).")]
+    [SerializeField] private string pickupTooltipTemplate = "Подобрать: {0} (стоимость: {1})";
+
     private readonly List<Item> _carried = new List<Item>(8);
     private readonly HashSet<Item> _inRange = new HashSet<Item>();
 
@@ -117,6 +123,8 @@ public class ItemCarrier : MonoBehaviour
             _interactAction.started -= OnInteractStarted;
         _playerMap?.Disable();
         ClearPickupOutline();
+        if (pickupTooltipEnabled && TooltipManager.Instance != null)
+            TooltipManager.Instance.Hide();
     }
 
     private void LateUpdate()
@@ -127,10 +135,33 @@ public class ItemCarrier : MonoBehaviour
             _pickupOutlineTarget?.SetPickupHighlight(false);
             _pickupOutlineTarget = best;
             _pickupOutlineTarget?.SetPickupHighlight(true);
+            SyncPickupTooltip(best);
         }
 
         if (_carried.Count > 0)
             RefreshStackLayout();
+    }
+
+    private void SyncPickupTooltip(Item best)
+    {
+        var tm = TooltipManager.Instance;
+        if (tm == null)
+            return;
+
+        if (!pickupTooltipEnabled)
+        {
+            if (best == null)
+                tm.Hide();
+            return;
+        }
+
+        if (best != null)
+        {
+            string msg = string.Format(pickupTooltipTemplate, best.gameObject.name, best.Cost);
+            tm.Show(msg);
+        }
+        else
+            tm.Hide();
     }
 
     private void ClearPickupOutline()
