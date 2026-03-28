@@ -15,6 +15,16 @@ public class VillagerAI : MonoBehaviour
     public float detectionDistance = 5f;
 
     [Header("Преследование")]
+    [Tooltip("Скорость NavMesh Agent при преследовании (юниты/с).")]
+    [SerializeField] [Min(0.01f)] private float chaseSpeed = 4f;
+
+    [Tooltip("High — плавнее к касательной пути. No — резче, сильнее занос.")]
+    [SerializeField] private ObstacleAvoidanceType obstacleAvoidance = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+
+    [SerializeField] [Min(1f)] private float chaseAcceleration = 24f;
+
+    [SerializeField] [Min(1f)] private float chaseAngularSpeed = 540f;
+
     [Tooltip("Считается, что житель догнал игрока (конец эпизода преследования).")]
     public float catchDistance = 0.65f;
 
@@ -39,6 +49,7 @@ public class VillagerAI : MonoBehaviour
     }
 
     private Transform _player;
+    private ItemCarrier _playerCarrier;
     private NavMeshAgent _agent;
     private Vector3 _spawnPosition;
     private PursuitPhase _phase = PursuitPhase.Idle;
@@ -47,11 +58,18 @@ public class VillagerAI : MonoBehaviour
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
+        {
             _player = playerObj.transform;
+            _playerCarrier = playerObj.GetComponent<ItemCarrier>();
+        }
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+        _agent.speed = chaseSpeed;
+        _agent.acceleration = chaseAcceleration;
+        _agent.angularSpeed = chaseAngularSpeed;
+        _agent.obstacleAvoidanceType = obstacleAvoidance;
 
         _spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
 
@@ -79,7 +97,7 @@ public class VillagerAI : MonoBehaviour
     {
         _agent.isStopped = true;
 
-        if (_player == null || !PlayerKnownAndOutsideShelter())
+        if (_player == null || !PlayerOutOfShelter())
             return;
 
         float dist = Vector3.Distance(transform.position, _player.position);
@@ -104,6 +122,7 @@ public class VillagerAI : MonoBehaviour
         float dist = Vector3.Distance(transform.position, _player.position);
         if (dist <= catchDistance)
         {
+            NpcStealCarriedItem2D.StripAll(_playerCarrier);
             EndPursuit($"догон: расстояние {dist:F2} ≤ catchDistance ({catchDistance})");
             return;
         }
@@ -165,7 +184,8 @@ public class VillagerAI : MonoBehaviour
             Debug.LogWarning($"[VillagerAI] {name}: {message}", this);
     }
 
-    private bool PlayerKnownAndOutsideShelter()
+    // Игрок найден и не в укрытии — можно детектить и преследовать.
+    private bool PlayerOutOfShelter()
     {
         return _player != null && !PlayerShelterState.IsInsidePlayerHome;
     }
