@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Интерьер здания: точка появления игрока внутри, триггер выхода телепортирует наружу.
 /// Связь с <see cref="Building"/> через <see cref="Bind"/>.
+/// Для дома игрока <see cref="PlayerShelterState"/> обновляется при выходе наружу.
 /// </summary>
 public class Interior : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Interior : MonoBehaviour
     [SerializeField] private Collider2D interiorCollider;
 
     private Transform _exteriorSpawnPoint;
+    private bool _isPlayerHome;
 
     /// <summary>Ссылка на назначенный коллайдер интерьера.</summary>
     public Collider2D InteriorCollider => interiorCollider;
@@ -45,9 +47,10 @@ public class Interior : MonoBehaviour
     /// <summary>
     /// Вызывается из <see cref="Building"/> после Instantiate префаба интерьера.
     /// </summary>
-    public void Bind(Transform exteriorSpawnPoint)
+    public void Bind(Transform exteriorSpawnPoint, bool isPlayerHome = false)
     {
         _exteriorSpawnPoint = exteriorSpawnPoint;
+        _isPlayerHome = isPlayerHome;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -84,6 +87,9 @@ public class Interior : MonoBehaviour
             Vector2 delta2 = rb.position - from;
             cc.ExitInteriorCamera(rb.transform, new Vector3(delta2.x, delta2.y, 0f));
         }
+
+        if (_isPlayerHome)
+            PlayerShelterState.NotifyExitedPlayerHome();
     }
 }
 
