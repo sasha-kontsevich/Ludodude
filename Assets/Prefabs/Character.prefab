@@ -353,3 +353,7 @@ MonoBehaviour:
   pickupTrigger: {fileID: 4634451150398689811}
   dropOffset: {x: 0, y: -0.45}
   carriedItemWorldHeight: 1
+  stackSpacingFactor: 0.52
+  wobbleFrequency: 10
+  wobblePositionAmplitude: 0.2
+  wobbleFullSpeed: 0.4
