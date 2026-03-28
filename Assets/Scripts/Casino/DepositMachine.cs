@@ -15,7 +15,7 @@ public class DepositMachine : MonoBehaviour
     [Tooltip("Куда летят предметы. Пусто — этот transform.")]
     [SerializeField] private Transform attractor;
 
-    [Tooltip("{0} — количество предметов, {1} — сумма стоимости.")]
+    [Tooltip("{0} — количество предметов, {1} — итоговая сумма с учётом мультипликатора продажи.")]
     [SerializeField] private string depositTooltipTemplate = "Сдать предметы ({0} шт., сумма: {1})";
 
     [Tooltip("Задержка между стартом полёта следующего предмета (предыдущий может ещё лететь).")]
@@ -68,14 +68,15 @@ public class DepositMachine : MonoBehaviour
             if (tm != null)
             {
                 int count = _carrierInZone.CarriedItems.Count;
-                int sum = 0;
+                int rawSum = 0;
                 foreach (var i in _carrierInZone.CarriedItems)
                 {
                     if (i != null)
-                        sum += i.Cost;
+                        rawSum += i.Cost;
                 }
 
-                tm.Show(string.Format(depositTooltipTemplate, count, sum));
+                float total = rawSum * _carrierInZone.GetSellPriceMultiplier();
+                tm.Show(string.Format(depositTooltipTemplate, count, total.ToString("0.##")));
             }
 
             _depositTooltipShown = true;
@@ -141,14 +142,15 @@ public class DepositMachine : MonoBehaviour
         if (gm == null)
             return false;
 
-        int sum = 0;
+        int rawSum = 0;
         foreach (var i in carrier.CarriedItems)
         {
             if (i != null)
-                sum += i.Cost;
+                rawSum += i.Cost;
         }
 
-        gm.CasinoDeposit += sum;
+        float total = rawSum * carrier.GetSellPriceMultiplier();
+        gm.CasinoDeposit += total;
 
         var machine = ActiveForPlayer;
         machine._depositBuffer.Clear();

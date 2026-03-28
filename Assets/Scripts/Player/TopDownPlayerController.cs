@@ -12,12 +12,14 @@ public class TopDownPlayerController : MonoBehaviour
     private InputActionMap _playerMap;
     private InputAction _moveAction;
     private InputAction _sprintAction;
+    private CharacterStats _stats;
 
     public Vector2 MoveInput { get; private set; }
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _stats = GetComponent<CharacterStats>();
         _rb.gravityScale = 0f;
         _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         if (inputActions == null)
@@ -51,7 +53,8 @@ public class TopDownPlayerController : MonoBehaviour
         if (input.sqrMagnitude > 1f)
             input.Normalize();
 
-        float speed = moveSpeed;
+        float speedMultiplier = _stats != null ? Mathf.Max(0f, _stats.SpeedMultiplier) : 1f;
+        float speed = moveSpeed * speedMultiplier;
         if (_sprintAction != null && _sprintAction.IsPressed())
             speed *= sprintMultiplier;
 
