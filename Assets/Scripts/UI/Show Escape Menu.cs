@@ -42,8 +42,7 @@ public class ShowEscape : MonoBehaviour
         toggleAction.performed -= OnToggle;
         toggleAction.Disable();
     }
-
-    
+   
 
     private void OnToggle(InputAction.CallbackContext context)
     {

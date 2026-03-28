@@ -14,7 +14,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool persistBetweenScenes;
 
+    
+    public int Time = 0; //From 0 to 86400 = 24*60*60
+
     public float CasinoDeposit;
+    public float MaxDeposit = 1e3f;
+    //percentage
+    public float Paranoia = 0f;
 
     public GameState State { get; private set; } = GameState.Playing;
 
