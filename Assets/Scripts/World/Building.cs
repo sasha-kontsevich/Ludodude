@@ -4,6 +4,8 @@ using UnityEngine.Serialization;
 /// <summary>
 /// Здание: спавнит префаб интерьера далеко от карты и телепортирует игрока при входе в коллайдер двери.
 /// Коллайдер двери — на этом же объекте или на дочернем (назначьте ссылку).
+/// Для дома ГГ включите флаг «дом игрока» — тогда при входе/выходе обновляется
+/// <see cref="PlayerShelterState"/> (логика <c>VillagerAI</c>).
 /// </summary>
 public class Building : MonoBehaviour
 {
@@ -18,6 +20,10 @@ public class Building : MonoBehaviour
     [SerializeField] private bool useManualInteriorPosition;
 
     [SerializeField] private Vector2 manualInteriorSpawnPosition;
+
+    [Header("Укрытие ГГ (VillagerAI)")]
+    [Tooltip("Если включено: вход в дом вызывает PlayerShelterState.NotifyEnteredPlayerHome(), выход из интерьера — NotifyExitedPlayerHome().")]
+    [SerializeField] private bool isPlayerHome;
 
     [Tooltip("Используется только для первого вызова InteriorSpawnLayout.Configure в этой сессии (если в сцене нет InteriorSpawnSettings). Задайте одинаковые значения на всех зданиях или повесьте InteriorSpawnSettings.")]
     [SerializeField] private Vector2 fallbackRegionAnchor = new Vector2(50_000f, 50_000f);
@@ -80,7 +86,7 @@ public class Building : MonoBehaviour
         {
             _teleportDestination = interior.GetPlayerSpawnPoint();
             Transform outside = exteriorSpawnPoint != null ? exteriorSpawnPoint : doorTrigger.transform;
-            interior.Bind(outside);
+            interior.Bind(outside, isPlayerHome);
         }
         else
         {
@@ -103,6 +109,7 @@ public class Building : MonoBehaviour
         TryTeleport(other);
     }
 
+    /// <summary>Телепорт игрока внутрь. Для дома ГГ помечает укрытие в <see cref="PlayerShelterState"/>.</summary>
     internal void TryTeleport(Collider2D other)
     {
         if (_teleportDestination == null)
@@ -118,7 +125,13 @@ public class Building : MonoBehaviour
 
         rb.position = _teleportDestination.position;
         rb.linearVelocity = Vector2.zero;
+
+        if (isPlayerHome)
+            PlayerShelterState.NotifyEnteredPlayerHome();
     }
+
+    /// <summary>Дом главного героя — единственное укрытие.</summary>
+    public bool IsPlayerHome => isPlayerHome;
 }
 
 /// <summary>

@@ -12,6 +12,7 @@ public class Interior : MonoBehaviour
     [SerializeField] private Transform playerSpawnPoint;
 
     private Transform _exteriorSpawnPoint;
+    private bool _isPlayerHomeInterior;
 
     private void Reset()
     {
@@ -39,9 +40,10 @@ public class Interior : MonoBehaviour
     /// <summary>
     /// Вызывается из <see cref="Building"/> после Instantiate префаба интерьера.
     /// </summary>
-    public void Bind(Transform exteriorSpawnPoint)
+    public void Bind(Transform exteriorSpawnPoint, bool isPlayerHome)
     {
         _exteriorSpawnPoint = exteriorSpawnPoint;
+        _isPlayerHomeInterior = isPlayerHome;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -70,6 +72,8 @@ public class Interior : MonoBehaviour
 
         rb.position = _exteriorSpawnPoint.position;
         rb.linearVelocity = Vector2.zero;
+        if (_isPlayerHomeInterior)
+            PlayerShelterState.NotifyExitedPlayerHome();
     }
 }
 
