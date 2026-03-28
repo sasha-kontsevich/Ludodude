@@ -186,4 +186,24 @@ public class Item : MonoBehaviour
             }
         }
     }
+
+    /// <summary>Снятие с носителя без включения коллайдеров и динамики — для анимации депозита.</summary>
+    internal void DetachFromCarrierForDeposit()
+    {
+        Carrier = null;
+        IsCarried = false;
+        transform.localScale = _localScaleBeforeCarry;
+
+        var cols = GetComponentsInChildren<Collider2D>(true);
+        foreach (var c in cols)
+            c.enabled = false;
+
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+    }
 }

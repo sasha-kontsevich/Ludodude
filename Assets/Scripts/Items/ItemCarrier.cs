@@ -31,6 +31,13 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("Расстояние между центрами предметов в стопке как доля высоты (меньше — плотнее).")]
     [SerializeField] [Range(0.2f, 1f)] private float stackSpacingFactor = 0.52f;
 
+    [Header("Анимация подбора")]
+    [Tooltip("Длительность полёта предмета по дуге в слот стопки.")]
+    [SerializeField] private float pickupArcDuration = 0.35f;
+
+    [Tooltip("Высота дуги в мировых единицах (пик посередине пути).")]
+    [SerializeField] private float pickupArcHeight = 0.35f;
+
     [Header("Покачивание стопки при ходьбе")]
     [SerializeField] private float wobbleFrequency = 11f;
 
@@ -54,6 +61,16 @@ public class ItemCarrier : MonoBehaviour
     private Item _pickupOutlineTarget;
     private Rigidbody2D _rb;
     private TopDownPlayerController _player;
+
+    private readonly Dictionary<Item, PickupAnimState> _pickupAnim = new Dictionary<Item, PickupAnimState>(8);
+
+    private struct PickupAnimState
+    {
+        public float StartTime;
+        public float Duration;
+        public Vector3 WorldStart;
+        public int StackIndex;
+    }
 
     public IReadOnlyList<Item> CarriedItems => _carried;
 
@@ -138,6 +155,7 @@ public class ItemCarrier : MonoBehaviour
             SyncPickupTooltip(best);
         }
 
+        UpdatePickupArcAnimations();
         if (_carried.Count > 0)
             RefreshStackLayout();
     }
@@ -172,6 +190,9 @@ public class ItemCarrier : MonoBehaviour
 
     private void OnInteractStarted(InputAction.CallbackContext _)
     {
+        if (DepositMachine.TryDeposit(this))
+            return;
+
         Item best = FindBestPickupableInRange();
         if (best != null)
         {
@@ -180,6 +201,41 @@ public class ItemCarrier : MonoBehaviour
         }
 
         DropLastCarriedItem();
+    }
+
+    /// <summary>После скрытия подсказки депозита — восстановить подсказку подбора, если рядом есть предмет.</summary>
+    public void RefreshTooltipAfterDepositZone()
+    {
+        SyncPickupTooltip(FindBestPickupableInRange());
+    }
+
+    /// <summary>Снимает все предметы со стопки для сдачи в депозит (без дропа на землю).</summary>
+    public void ReleaseAllItemsForDeposit(List<Item> into)
+    {
+        if (into == null)
+            return;
+
+        into.Clear();
+        for (int i = 0; i < _carried.Count; i++)
+        {
+            var item = _carried[i];
+            if (item != null)
+                into.Add(item);
+        }
+
+        _carried.Clear();
+        CurrentCarriedCost = 0;
+
+        foreach (var item in into)
+        {
+            if (item == null)
+                continue;
+            if (item == _pickupOutlineTarget)
+                _pickupOutlineTarget = null;
+            _pickupAnim.Remove(item);
+            item.transform.SetParent(null, true);
+            item.DetachFromCarrierForDeposit();
+        }
     }
 
     /// <summary>Снимает верхний предмет в стопке и кладёт рядом с носителем.</summary>
@@ -201,6 +257,8 @@ public class ItemCarrier : MonoBehaviour
 
         if (item == _pickupOutlineTarget)
             _pickupOutlineTarget = null;
+
+        _pickupAnim.Remove(item);
 
         item.transform.SetParent(null, true);
         Vector3 pos = _stackRoot.position + (Vector3)dropOffset;
@@ -265,28 +323,88 @@ public class ItemCarrier : MonoBehaviour
         _carried.Add(item);
         CurrentCarriedCost += item.Cost;
         item.SetCarried(this, true);
+
+        int stackIndex = _carried.Count - 1;
+        float duration = Mathf.Max(0.01f, pickupArcDuration);
+        if (pickupArcHeight > 0.0001f && duration > 0.0001f)
+        {
+            _pickupAnim[item] = new PickupAnimState
+            {
+                StartTime = Time.time,
+                Duration = duration,
+                WorldStart = item.transform.position,
+                StackIndex = stackIndex
+            };
+        }
+
         RefreshStackLayout();
         return true;
     }
 
-    private void RefreshStackLayout()
+    private Vector3 GetStackSlotBaseLocal(int index)
     {
         float step = CarriedItemWorldHeight * stackSpacingFactor;
+        float y = 0f;
+        for (int i = 0; i < _carried.Count; i++)
+        {
+            float half = step * 0.5f;
+            y += half;
+            if (i == index)
+                return new Vector3(0f, y, 0f);
+            y += half;
+        }
+
+        return Vector3.zero;
+    }
+
+    private void UpdatePickupArcAnimations()
+    {
+        if (_pickupAnim.Count == 0)
+            return;
+
+        var done = new List<Item>(4);
+        foreach (var kv in _pickupAnim)
+        {
+            var item = kv.Key;
+            var st = kv.Value;
+            if (item == null || !item.IsCarried || item.Carrier != this)
+            {
+                done.Add(kv.Key);
+                continue;
+            }
+
+            float elapsed = Time.time - st.StartTime;
+            float u = Mathf.Clamp01(elapsed / Mathf.Max(1e-5f, st.Duration));
+            float s = u * u * (3f - 2f * u);
+            Vector3 worldEnd = _stackRoot.TransformPoint(GetStackSlotBaseLocal(st.StackIndex));
+            Vector3 pos = Vector3.Lerp(st.WorldStart, worldEnd, s);
+            pos += Vector3.up * (pickupArcHeight * 4f * u * (1f - u));
+            item.transform.position = pos;
+
+            if (u >= 1f)
+                done.Add(kv.Key);
+        }
+
+        for (int i = 0; i < done.Count; i++)
+            _pickupAnim.Remove(done[i]);
+    }
+
+    private void RefreshStackLayout()
+    {
         float moveBlend = GetCarryMoveBlend();
         float t = Time.time * wobbleFrequency;
 
-        float y = 0f;
         for (int i = 0; i < _carried.Count; i++)
         {
             var it = _carried[i];
             if (it == null)
                 continue;
 
-            float half = step * 0.5f;
-            y += half;
-            Vector3 basePos = new Vector3(0f, y, 0f);
+            if (_pickupAnim.ContainsKey(it))
+                continue;
+
+            Vector3 basePos = GetStackSlotBaseLocal(i);
             it.transform.localPosition = basePos + GetStackWobbleOffset(i, t, moveBlend);
-            y += half;
         }
     }
 
