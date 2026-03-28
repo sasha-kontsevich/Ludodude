@@ -3,6 +3,7 @@ using UnityEngine;
 public enum GameState
 {
     Playing,
+    Paused,
     Victory,
     Defeat
 }
@@ -19,6 +20,16 @@ public class GameManager : MonoBehaviour
 
     public bool IsGameOver => State != GameState.Playing;
 
+    public void Pause()
+    {
+        State = GameState.Paused;
+        //To Do
+    }
+    public void Resume()
+    {
+        State = GameState.Playing;
+        //To Do
+    }
     void Awake()
     {
         if (Instance != null && Instance != this)

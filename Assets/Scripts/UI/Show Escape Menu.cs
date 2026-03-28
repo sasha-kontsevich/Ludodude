@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,21 @@ public class ShowEscape : MonoBehaviour
     [SerializeField] public InputActionAsset UIActions;
 
     private InputAction toggleAction;
+
+    private GameManager gm = null;
+    private void Start()
+    {
+        if(gm == null)
+        {
+            gm = GameManager.Instance;
+            if(gm == null)
+            {
+                
+                Debug.Log("Null game manager");
+                return;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -27,8 +43,12 @@ public class ShowEscape : MonoBehaviour
         toggleAction.Disable();
     }
 
+    
+
     private void OnToggle(InputAction.CallbackContext context)
     {
+        if (targetObject.activeSelf)gm.Resume();
+        else gm.Pause();
         targetObject.SetActive(!targetObject.activeSelf);
     }
 }
