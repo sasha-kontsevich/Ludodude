@@ -11,12 +11,14 @@ public class UIDragging : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public float finishDiaposon = 0.1f; 
 
     private RectTransform panel;
+    [Range(0f, 1f)]
     public float value = 0f;
     private bool isDragging = false;
 
     public void Start()
     {
         panel = GetComponent<RectTransform>();
+        handRenderer = GetComponent<SpriteRenderer>();
     }
 
     float getNormilizedHeightPosition(PointerEventData eventData)
@@ -68,4 +70,26 @@ public class UIDragging : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
         
     }
+
+
+    private SpriteRenderer handRenderer;  
+    public Sprite[] handSprites;         
+
+    
+          
+
+    void Update()
+    {
+        if (handSprites.Length == 0 || handRenderer == null) return;
+
+        // Вычисляем индекс спрайта
+        int index = Mathf.FloorToInt(value * (handSprites.Length - 1));
+
+        // Назначаем спрайт
+        handRenderer.sprite = handSprites[index];
+    }
+
+
+
+
 }

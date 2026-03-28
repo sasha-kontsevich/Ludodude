@@ -11,7 +11,13 @@ public class Interior : MonoBehaviour
     [Tooltip("Куда ставить игрока при входе с улицы (из Building). Пусто — корень этого объекта.")]
     [SerializeField] private Transform playerSpawnPoint;
 
+    [Tooltip("Дополнительный коллайдер интерьера (например границы для камеры или зоны).")]
+    [SerializeField] private Collider2D interiorCollider;
+
     private Transform _exteriorSpawnPoint;
+
+    /// <summary>Ссылка на назначенный коллайдер интерьера.</summary>
+    public Collider2D InteriorCollider => interiorCollider;
 
     private void Reset()
     {
@@ -68,8 +74,16 @@ public class Interior : MonoBehaviour
         if (rb == null)
             return;
 
+        Vector2 from = rb.position;
         rb.position = _exteriorSpawnPoint.position;
         rb.linearVelocity = Vector2.zero;
+
+        var cc = CameraController.Instance;
+        if (cc != null)
+        {
+            Vector2 delta2 = rb.position - from;
+            cc.ExitInteriorCamera(rb.transform, new Vector3(delta2.x, delta2.y, 0f));
+        }
     }
 }
 

@@ -27,6 +27,7 @@ public class Building : MonoBehaviour
 
     private GameObject _interiorInstance;
     private Transform _teleportDestination;
+    private Interior _interior;
 
     private void Reset()
     {
@@ -78,6 +79,7 @@ public class Building : MonoBehaviour
         var interior = _interiorInstance.GetComponentInChildren<Interior>();
         if (interior != null)
         {
+            _interior = interior;
             _teleportDestination = interior.GetPlayerSpawnPoint();
             Transform outside = exteriorSpawnPoint != null ? exteriorSpawnPoint : doorTrigger.transform;
             interior.Bind(outside);
@@ -116,8 +118,20 @@ public class Building : MonoBehaviour
         if (rb == null)
             return;
 
+        Vector2 from = rb.position;
         rb.position = _teleportDestination.position;
         rb.linearVelocity = Vector2.zero;
+
+        var cc = CameraController.Instance;
+        if (cc != null)
+        {
+            Vector2 delta2 = rb.position - from;
+            var warp = new Vector3(delta2.x, delta2.y, 0f);
+            if (_interior != null)
+                cc.EnterInteriorCamera(rb.transform, warp, _interior.InteriorCollider);
+            else
+                cc.NotifyPlayerTeleported(rb.transform, warp);
+        }
     }
 }
 
