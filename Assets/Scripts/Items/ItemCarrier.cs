@@ -28,6 +28,23 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("Высота предмета в мировых единицах, к которой масштабируется модель, пока её несут (равномерный scale по X и Y).")]
     [SerializeField] private float carriedItemWorldHeight = 0.45f;
 
+    [Tooltip("Расстояние между центрами предметов в стопке как доля высоты (меньше — плотнее).")]
+    [SerializeField] [Range(0.2f, 1f)] private float stackSpacingFactor = 0.52f;
+
+    [Header("Покачивание стопки при ходьбе")]
+    [SerializeField] private float wobbleFrequency = 11f;
+
+    [SerializeField] private float wobblePositionAmplitude = 0.038f;
+
+    [Tooltip("Скорость носителя, при которой покачивание максимальное (м/с).")]
+    [SerializeField] private float wobbleFullSpeed = 2.2f;
+
+    [Header("Подсказка при подборе")]
+    [SerializeField] private bool pickupTooltipEnabled = true;
+
+    [Tooltip("{0} — имя объекта, {1} — стоимость (Item.Cost).")]
+    [SerializeField] private string pickupTooltipTemplate = "Подобрать: {0} (стоимость: {1})";
+
     private readonly List<Item> _carried = new List<Item>(8);
     private readonly HashSet<Item> _inRange = new HashSet<Item>();
 
@@ -35,6 +52,8 @@ public class ItemCarrier : MonoBehaviour
     private InputAction _interactAction;
     private Transform _stackRoot;
     private Item _pickupOutlineTarget;
+    private Rigidbody2D _rb;
+    private TopDownPlayerController _player;
 
     public IReadOnlyList<Item> CarriedItems => _carried;
 
@@ -53,6 +72,9 @@ public class ItemCarrier : MonoBehaviour
             Debug.LogWarning("ItemCarrier: не найден триггер-коллайдер (дочерний CircleCollider2D с Is Trigger). Подбор по зоне не заработает.", this);
 
         EnsureStackRoot();
+
+        _rb = GetComponent<Rigidbody2D>();
+        _player = GetComponent<TopDownPlayerController>();
 
         if (inputActions != null)
         {
@@ -101,6 +123,8 @@ public class ItemCarrier : MonoBehaviour
             _interactAction.started -= OnInteractStarted;
         _playerMap?.Disable();
         ClearPickupOutline();
+        if (pickupTooltipEnabled && TooltipManager.Instance != null)
+            TooltipManager.Instance.Hide();
     }
 
     private void LateUpdate()
@@ -111,7 +135,33 @@ public class ItemCarrier : MonoBehaviour
             _pickupOutlineTarget?.SetPickupHighlight(false);
             _pickupOutlineTarget = best;
             _pickupOutlineTarget?.SetPickupHighlight(true);
+            SyncPickupTooltip(best);
         }
+
+        if (_carried.Count > 0)
+            RefreshStackLayout();
+    }
+
+    private void SyncPickupTooltip(Item best)
+    {
+        var tm = TooltipManager.Instance;
+        if (tm == null)
+            return;
+
+        if (!pickupTooltipEnabled)
+        {
+            if (best == null)
+                tm.Hide();
+            return;
+        }
+
+        if (best != null)
+        {
+            string msg = string.Format(pickupTooltipTemplate, best.gameObject.name, best.Cost);
+            tm.Show(msg);
+        }
+        else
+            tm.Hide();
     }
 
     private void ClearPickupOutline()
@@ -221,6 +271,10 @@ public class ItemCarrier : MonoBehaviour
 
     private void RefreshStackLayout()
     {
+        float step = CarriedItemWorldHeight * stackSpacingFactor;
+        float moveBlend = GetCarryMoveBlend();
+        float t = Time.time * wobbleFrequency;
+
         float y = 0f;
         for (int i = 0; i < _carried.Count; i++)
         {
@@ -228,11 +282,35 @@ public class ItemCarrier : MonoBehaviour
             if (it == null)
                 continue;
 
-            float half = carriedItemWorldHeight * 0.5f;
+            float half = step * 0.5f;
             y += half;
-            it.transform.localPosition = new Vector3(0f, y, 0f);
+            Vector3 basePos = new Vector3(0f, y, 0f);
+            it.transform.localPosition = basePos + GetStackWobbleOffset(i, t, moveBlend);
             y += half;
         }
+    }
+
+    private float GetCarryMoveBlend()
+    {
+        float blend = 0f;
+        if (_rb != null)
+            blend = Mathf.Clamp01(_rb.linearVelocity.magnitude / Mathf.Max(0.05f, wobbleFullSpeed));
+        if (blend < 0.08f && _player != null)
+            blend = Mathf.Max(blend, Mathf.Clamp01(_player.MoveInput.magnitude));
+        return blend;
+    }
+
+    private Vector3 GetStackWobbleOffset(int index, float t, float moveBlend)
+    {
+        if (moveBlend < 0.001f)
+            return Vector3.zero;
+
+        float ix = index * 0.71f;
+        float iy = index * 0.37f;
+        float a = wobblePositionAmplitude * moveBlend;
+        float x = Mathf.Sin(t + ix) * a;
+        float y = Mathf.Sin(t * 1.13f + iy) * a * 0.62f;
+        return new Vector3(x, y, 0f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
