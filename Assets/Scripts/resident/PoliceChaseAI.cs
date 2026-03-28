@@ -24,11 +24,27 @@ public class PoliceChaseAI : MonoBehaviour
 
     public float chaseStoppingDistance = 0.35f;
 
+    [Header("Игрок сам сбросил добычу (вдали)")]
+    [Tooltip("За это время скорость падает с chaseSpeed до конечной — без похода к точке сброса.")]
+    [SerializeField] [Min(0.05f)] private float slowDownAfterDropDuration = 1.1f;
+
+    [Tooltip("Скорость в конце замедления (до остановки в Idle).")]
+    [SerializeField] [Min(0f)] private float slowDownAfterDropEndSpeed = 0.45f;
+
+    [Tooltip("Ускорение в конце замедления (мягче тормозит).")]
+    [SerializeField] [Min(0.01f)] private float slowDownAfterDropEndAccel = 10f;
+
+    [Tooltip("Если до цели на пути осталось меньше — можно завершить охлаждение раньше по времени.")]
+    [SerializeField] private float coolingArriveDistanceSlack = 0.35f;
+
     [Header("После догона или укрытия")]
     public VillagerPursuitEndAction pursuitEndAction = VillagerPursuitEndAction.ReturnToSpawn;
 
     [Tooltip("Точка возврата после погони. Пусто — позиция при старте сцены.")]
     [SerializeField] private Transform spawnPoint;
+
+    [Tooltip("Если добыча пропала, а офицер ближе этого расстояния до игрока — контакт (кража триггером / догон) и телепорт на спавн.")]
+    [SerializeField] private float teleportIfLootLostWithinDistance = 2.5f;
 
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
@@ -38,7 +54,8 @@ public class PoliceChaseAI : MonoBehaviour
     private enum PursuitPhase
     {
         Idle,
-        Chasing
+        Chasing,
+        CoolingDownAfterDrop
     }
 
     private Transform _player;
@@ -46,6 +63,9 @@ public class PoliceChaseAI : MonoBehaviour
     private NavMeshAgent _agent;
     private Vector3 _spawnPosition;
     private PursuitPhase _phase = PursuitPhase.Idle;
+
+    private Vector3 _coolingDestination;
+    private float _coolingElapsed;
 
     private void Start()
     {
@@ -84,8 +104,10 @@ public class PoliceChaseAI : MonoBehaviour
 
         if (_phase == PursuitPhase.Idle)
             UpdateIdle();
-        else
+        else if (_phase == PursuitPhase.Chasing)
             UpdateChasing();
+        else
+            UpdateCoolingDownAfterDrop();
     }
 
     private void UpdateIdle()
@@ -105,19 +127,32 @@ public class PoliceChaseAI : MonoBehaviour
     {
         if (_player == null)
         {
-            EndPursuit("игрок пропал (null)");
+            EndPursuitTeleport("игрок пропал (null)");
             return;
         }
 
         if (PlayerShelterState.IsInsidePlayerHome)
         {
-            EndPursuit("игрок в укрытии (дом)");
+            EndPursuitTeleport("игрок в укрытии (дом)");
             return;
         }
 
         if (!HasLoot())
         {
-            EndPursuit("игрок перестал нести предмет");
+            float distToPlayer = Vector3.Distance(transform.position, _player.position);
+            if (distToPlayer <= teleportIfLootLostWithinDistance)
+            {
+                EndPursuitTeleport($"добыча снята вблизи офицера (дистанция {distToPlayer:F2} ≤ {teleportIfLootLostWithinDistance})");
+                return;
+            }
+
+            Log("Игрок сбросил добычу вдали — замедление");
+            _coolingDestination = _agent.hasPath ? _agent.destination : transform.position;
+            _coolingElapsed = 0f;
+            _phase = PursuitPhase.CoolingDownAfterDrop;
+            _agent.isStopped = false;
+            _agent.stoppingDistance = Mathf.Max(0f, chaseStoppingDistance);
+            _agent.SetDestination(_coolingDestination);
             return;
         }
 
@@ -125,7 +160,7 @@ public class PoliceChaseAI : MonoBehaviour
         if (dist <= catchDistance)
         {
             NpcStealCarriedItem2D.StripAll(_playerCarrier);
-            EndPursuit($"догон: расстояние {dist:F2} ≤ catchDistance ({catchDistance})");
+            EndPursuitTeleport($"догон: расстояние {dist:F2} ≤ catchDistance ({catchDistance})");
             return;
         }
 
@@ -134,7 +169,48 @@ public class PoliceChaseAI : MonoBehaviour
         _agent.SetDestination(_player.position);
     }
 
-    // В руках есть хотя бы один предмет (ItemCarrier).
+    private void UpdateCoolingDownAfterDrop()
+    {
+        if (_player != null && PlayerOutOfShelter() && HasLoot())
+        {
+            Log("Игрок снова с предметом — продолжаю погоню");
+            BeginChase();
+            return;
+        }
+
+        if (_player == null)
+        {
+            EndPursuitTeleport("игрок пропал при замедлении");
+            return;
+        }
+
+        if (PlayerShelterState.IsInsidePlayerHome)
+        {
+            EndPursuitTeleport("игрок в укрытии при замедлении");
+            return;
+        }
+
+        _coolingElapsed += Time.deltaTime;
+        float u = Mathf.Clamp01(_coolingElapsed / slowDownAfterDropDuration);
+        _agent.speed = Mathf.Lerp(chaseSpeed, slowDownAfterDropEndSpeed, u);
+        _agent.acceleration = Mathf.Lerp(chaseAcceleration, slowDownAfterDropEndAccel, u);
+        _agent.isStopped = false;
+        _agent.SetDestination(_coolingDestination);
+
+        bool arrived = !_agent.pathPending &&
+            _agent.hasPath &&
+            _agent.remainingDistance <= _agent.stoppingDistance + coolingArriveDistanceSlack;
+
+        if (u >= 1f || arrived)
+        {
+            Log("Замедление завершено — патруль/ожидание");
+            _phase = PursuitPhase.Idle;
+            _agent.isStopped = true;
+            _agent.speed = chaseSpeed;
+            _agent.acceleration = chaseAcceleration;
+        }
+    }
+
     private bool HasLoot()
     {
         return _playerCarrier != null && _playerCarrier.CarriedItems.Count > 0;
@@ -146,10 +222,12 @@ public class PoliceChaseAI : MonoBehaviour
         Log($"Начало погони: игрок с предметом, дистанция до цели {dist:F2}");
 
         _phase = PursuitPhase.Chasing;
+        _agent.speed = chaseSpeed;
+        _agent.acceleration = chaseAcceleration;
         _agent.isStopped = false;
     }
 
-    private void EndPursuit(string reason)
+    private void EndPursuitTeleport(string reason)
     {
         Log($"Конец погони: {reason}");
 
@@ -164,6 +242,8 @@ public class PoliceChaseAI : MonoBehaviour
         TeleportToSpawn();
         _phase = PursuitPhase.Idle;
         _agent.isStopped = true;
+        _agent.speed = chaseSpeed;
+        _agent.acceleration = chaseAcceleration;
     }
 
     private void TeleportToSpawn()
@@ -192,7 +272,6 @@ public class PoliceChaseAI : MonoBehaviour
             Debug.LogWarning($"[PoliceChaseAI] {name}: {message}", this);
     }
 
-    // Игрок найден и не в укрытии — можно детектить и преследовать.
     private bool PlayerOutOfShelter()
     {
         return _player != null && !PlayerShelterState.IsInsidePlayerHome;
