@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Подбирает предметы с компонентом Item, складывает их над головой (один над другим).
-/// Суммарная стоимость не превышает maxCarryCost (если maxCarryCost &gt; 0).
+/// Лимит стоимости берётся из CharacterStats.MaxCarryCost (или из legacy-поля для старых префабов).
 /// </summary>
 public class ItemCarrier : MonoBehaviour
 {
@@ -16,8 +17,9 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("Смещение якоря ношения от корня, если carryAnchor не задан.")]
     [SerializeField] private Vector2 carryAnchorOffset = new Vector2(0f, 0.85f);
 
-    [Tooltip("Максимальная суммарная стоимость предметов. 0 или меньше — без лимита по стоимости.")]
-    [SerializeField] private int maxCarryCost = 10;
+    [FormerlySerializedAs("maxCarryCost")]
+    [Tooltip("Устаревшее поле для миграции. Используется, только если на объекте нет CharacterStats.")]
+    [SerializeField] private int legacyMaxCarryCost = 10;
 
     [Tooltip("Коллайдер-триггер зоны подбора (дочерний CircleCollider2D и т.д.). Пусто — первый триггер на этом объекте или на детях.")]
     [SerializeField] private Collider2D pickupTrigger;
@@ -61,6 +63,7 @@ public class ItemCarrier : MonoBehaviour
     private Item _pickupOutlineTarget;
     private Rigidbody2D _rb;
     private TopDownPlayerController _player;
+    private CharacterStats _stats;
 
     private readonly Dictionary<Item, PickupAnimState> _pickupAnim = new Dictionary<Item, PickupAnimState>(8);
 
@@ -92,6 +95,7 @@ public class ItemCarrier : MonoBehaviour
 
         _rb = GetComponent<Rigidbody2D>();
         _player = GetComponent<TopDownPlayerController>();
+        _stats = GetComponent<CharacterStats>();
 
         if (inputActions != null)
         {
@@ -304,9 +308,18 @@ public class ItemCarrier : MonoBehaviour
 
     public bool CanAddCost(int itemCost)
     {
+        int maxCarryCost = _stats != null ? _stats.MaxCarryCost : legacyMaxCarryCost;
         if (maxCarryCost <= 0)
             return true;
         return CurrentCarriedCost + itemCost <= maxCarryCost;
+    }
+
+    public float GetSellPriceMultiplier()
+    {
+        if (_stats == null)
+            return 1f;
+
+        return Mathf.Max(0f, _stats.SellPriceMultiplier);
     }
 
     public bool PickUp(Item item)

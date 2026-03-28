@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 7992877714495936517}
   - component: {fileID: 2850756238243084747}
   - component: {fileID: 6083208628322182716}
+  - component: {fileID: 7712345678901234567}
   - component: {fileID: 3546192014493976149}
   - component: {fileID: 5980552836062809012}
   m_Layer: 0
@@ -298,6 +299,21 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   moveSpeed: 10
   sprintMultiplier: 1.5
+--- !u!114 &7712345678901234567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035849364219419289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d1efc7f4f24e96bcb2f59fa2a11f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
+  maxCarryCost: 21000
+  speedMultiplier: 1
+  sellPriceMultiplier: 1
 --- !u!58 &3546192014493976149
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -349,7 +365,7 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   carryAnchor: {fileID: 0}
   carryAnchorOffset: {x: 0, y: 0.85}
-  maxCarryCost: 21000
+  legacyMaxCarryCost: 21000
   pickupTrigger: {fileID: 4634451150398689811}
   dropOffset: {x: 0, y: -0.45}
   carriedItemWorldHeight: 1
