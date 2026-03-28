@@ -678,6 +678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interior
   exitDoorTrigger: {fileID: 6470558679831425224}
   playerSpawnPoint: {fileID: 4810295811613486480}
+  roomCamera: {fileID: 4725044368477564608}
 --- !u!1 &7161400137757616621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1240,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8611871492365315319}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 

@@ -348,7 +348,7 @@ Transform:
   m_GameObject: {fileID: 756258291}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.1642, y: -6.0515, z: -10}
+  m_LocalPosition: {x: -47, y: 21.799995, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -689,6 +689,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8758688693182824886, guid: 75a0fafb44f7ccf4f93ae25b6c7c6d29, type: 3}
+      propertyPath: brain
+      value: 
+      objectReference: {fileID: 756258292}
+    - target: {fileID: 8758688693182824886, guid: 75a0fafb44f7ccf4f93ae25b6c7c6d29, type: 3}
+      propertyPath: worldCamera
+      value: 
+      objectReference: {fileID: 1374283958}
+    - target: {fileID: 8758688693182824886, guid: 75a0fafb44f7ccf4f93ae25b6c7c6d29, type: 3}
+      propertyPath: cinemachineVirtualCameraObject
+      value: 
+      objectReference: {fileID: 1374283952}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
