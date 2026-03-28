@@ -229,11 +229,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5890962799985359792, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -70.19503
+      value: -75.80503
       objectReference: {fileID: 0}
     - target: {fileID: 5890962799985359792, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.645563
+      value: 14.41556
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035675957992339901, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
+      propertyPath: Priority.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035675957992339901, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
+      propertyPath: Priority.m_Value
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8280034576691126734, guid: 8f4a44d9aab92244ebd32ac1de57cf37, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[57].m_Data

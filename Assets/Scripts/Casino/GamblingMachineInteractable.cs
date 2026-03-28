@@ -14,14 +14,18 @@ public class GamblingMachineInteractable : MonoBehaviour
     [SerializeField] private bool hidePanelOnExit = true;
     [SerializeField] private bool openByInteract = true;
     [SerializeField] private bool togglePanelByInteract = true;
+    [SerializeField] private InputActionAsset inputActions;
 
     [Header("Tooltip")]
     [SerializeField] private bool showTooltip = true;
-    [SerializeField] private string interactTooltipText = "Играть в слот (E)";
+    [SerializeField] private string interactTooltipText = "Играть в слот";
 
     private TopDownPlayerController _playerInZone;
     private bool _tooltipShown;
     private bool _warnedAboutMissingPresenter;
+    private InputActionMap _playerMap;
+    private InputAction _interactAction;
+    private bool _interactPressedThisFrame;
 
     private void Reset()
     {
@@ -40,6 +44,12 @@ public class GamblingMachineInteractable : MonoBehaviour
         if (zoneTrigger == null)
             zoneTrigger = GetComponent<Collider2D>();
 
+        if (inputActions != null)
+        {
+            _playerMap = inputActions.FindActionMap("Player");
+            _interactAction = _playerMap?.FindAction("Interact");
+        }
+
         if (zoneTrigger != null && zoneTrigger.gameObject != gameObject)
         {
             var relay = zoneTrigger.GetComponent<GamblingMachineTriggerRelay>();
@@ -48,7 +58,17 @@ public class GamblingMachineInteractable : MonoBehaviour
             relay.Init(this);
         }
 
+        if (openByInteract && _interactAction == null)
+            Debug.LogWarning("GamblingMachineInteractable: assign Input Actions asset with Player/Interact action.", this);
+
         ResolvePresenterIfNeeded();
+    }
+
+    private void OnEnable()
+    {
+        _playerMap?.Enable();
+        if (_interactAction != null)
+            _interactAction.started += OnInteractStarted;
     }
 
     private void OnTriggerEnter2D(Collider2D other) => HandleTriggerEnter(other);
@@ -106,8 +126,9 @@ public class GamblingMachineInteractable : MonoBehaviour
         else
             HideTooltip();
 
-        if (!openByInteract || !WasInteractPressed())
+        if (!openByInteract || !_interactPressedThisFrame)
             return;
+        _interactPressedThisFrame = false;
 
         if (panelPresenter == null || machineController == null)
         {
@@ -132,17 +153,15 @@ public class GamblingMachineInteractable : MonoBehaviour
 
     private void OnDisable()
     {
+        if (_interactAction != null)
+            _interactAction.started -= OnInteractStarted;
+        _playerMap?.Disable();
         HideTooltip();
     }
 
-    private static bool WasInteractPressed()
+    private void OnInteractStarted(InputAction.CallbackContext _)
     {
-        var keyboard = Keyboard.current;
-        if (keyboard != null && keyboard.eKey.wasPressedThisFrame)
-            return true;
-
-        var gamepad = Gamepad.current;
-        return gamepad != null && gamepad.buttonSouth.wasPressedThisFrame;
+        _interactPressedThisFrame = true;
     }
 
     private void ResolvePresenterIfNeeded()

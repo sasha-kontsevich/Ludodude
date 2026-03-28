@@ -901,6 +901,7 @@ MonoBehaviour:
   hidePanelOnExit: 1
   openByInteract: 1
   togglePanelByInteract: 1
+  inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   showTooltip: 1
   interactTooltipText: "\u0418\u0433\u0440\u0430\u0442\u044C \u0432 \u0441\u043B\u043E\u0442
     (E)"
