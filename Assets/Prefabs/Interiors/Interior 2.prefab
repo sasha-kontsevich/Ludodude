@@ -349,7 +349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2321025045050616803}
   m_Layer: 0
-  m_Name: Interior
+  m_Name: Interior 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
