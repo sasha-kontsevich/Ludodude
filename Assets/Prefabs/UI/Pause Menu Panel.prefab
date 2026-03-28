@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 7075641109270912647}
   - component: {fileID: 3404531870187207650}
   - component: {fileID: 4796260114313709977}
+  - component: {fileID: 6196209893080795471}
   m_Layer: 5
   m_Name: Pause Menu Panel
   m_TagString: Untagged
@@ -214,6 +215,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6196209893080795471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3303347147720880630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1bfe0de46353b24f8540ee0022a7358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapeMenu
+  mainSceneName: Main menu
 --- !u!1 &5797968430900803284
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6196209893080795471}
         m_TargetAssemblyTypeName: EscapeMenu, Assembly-CSharp
         m_MethodName: Leave
         m_Mode: 1
@@ -468,7 +482,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6196209893080795471}
         m_TargetAssemblyTypeName: EscapeMenu, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
