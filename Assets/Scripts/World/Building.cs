@@ -4,6 +4,8 @@ using UnityEngine.Serialization;
 /// <summary>
 /// Здание: спавнит префаб интерьера далеко от карты и телепортирует игрока при входе в коллайдер двери.
 /// Коллайдер двери — на этом же объекте или на дочернем (назначьте ссылку).
+/// Для дома ГГ включите флаг «дом игрока» — тогда при входе/выходе обновляется
+/// <see cref="PlayerShelterState"/> (логика <c>VillagerAI</c>).
 /// </summary>
 public class Building : MonoBehaviour
 {
@@ -24,6 +26,10 @@ public class Building : MonoBehaviour
 
     [SerializeField] private int fallbackGridColumns = 32;
     [SerializeField] private float fallbackCellSize = 2048f;
+
+    [Header("Укрытие ГГ (VillagerAI)")]
+    [Tooltip("Если включено: вход в дом вызывает PlayerShelterState.NotifyEnteredPlayerHome(), выход из интерьера — NotifyExitedPlayerHome().")]
+    [SerializeField] private bool isPlayerHome;
 
     private GameObject _interiorInstance;
     private Transform _teleportDestination;
@@ -82,7 +88,7 @@ public class Building : MonoBehaviour
             _interior = interior;
             _teleportDestination = interior.GetPlayerSpawnPoint();
             Transform outside = exteriorSpawnPoint != null ? exteriorSpawnPoint : doorTrigger.transform;
-            interior.Bind(outside);
+            interior.Bind(outside, isPlayerHome);
         }
         else
         {
@@ -132,6 +138,9 @@ public class Building : MonoBehaviour
             else
                 cc.NotifyPlayerTeleported(rb.transform, warp);
         }
+
+        if (isPlayerHome)
+            PlayerShelterState.NotifyEnteredPlayerHome();
     }
 }
 
