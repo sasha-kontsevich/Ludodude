@@ -7,6 +7,9 @@ public class TopDownPlayerController : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintMultiplier = 1.5f;
+    [Header("Audio")]
+    [SerializeField] private string footstepsSoundKey = "footsteps_loop";
+    [SerializeField] private float movementInputDeadzone = 0.1f;
 
     private Rigidbody2D _rb;
     private InputActionMap _playerMap;
@@ -42,6 +45,7 @@ public class TopDownPlayerController : MonoBehaviour
     private void OnDisable()
     {
         _playerMap?.Disable();
+        StopFootstepsLoop();
     }
 
     private void FixedUpdate()
@@ -59,7 +63,27 @@ public class TopDownPlayerController : MonoBehaviour
             speed *= sprintMultiplier;
 
         MoveInput = input;
+        float deadzone = Mathf.Max(0f, movementInputDeadzone);
+        bool isMoving = input.sqrMagnitude >= deadzone * deadzone && speed > 0f;
+        UpdateFootstepsLoop(isMoving);
         Vector2 delta = input * (speed * Time.fixedDeltaTime);
         _rb.MovePosition(_rb.position + delta);
+    }
+
+    private void UpdateFootstepsLoop(bool isMoving)
+    {
+        var audioManager = AudioManager.Instance;
+        if (audioManager == null || string.IsNullOrWhiteSpace(footstepsSoundKey))
+            return;
+
+        audioManager.SetLoopSoundPlaying(footstepsSoundKey, isMoving);
+    }
+
+    private void StopFootstepsLoop()
+    {
+        if (string.IsNullOrWhiteSpace(footstepsSoundKey))
+            return;
+
+        AudioManager.Instance?.StopSound(footstepsSoundKey);
     }
 }

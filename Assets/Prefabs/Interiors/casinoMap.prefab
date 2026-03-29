@@ -5265,6 +5265,7 @@ Transform:
   - {fileID: 1013315650698758027}
   - {fileID: 6787759881784902799}
   - {fileID: 9072540155735328569}
+  - {fileID: 5101762543599125023}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6590878159449838512
@@ -5281,6 +5282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interior
   exitDoorTrigger: {fileID: 0}
   playerSpawnPoint: {fileID: 0}
+  interiorCollider: {fileID: 0}
 --- !u!1 &9170179950944851785
 GameObject:
   m_ObjectHideFlags: 0
@@ -5441,6 +5443,108 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8255386050757889807, guid: 7ca14d06650ba1a4ea4d27af7bd74f45, type: 3}
   m_PrefabInstance: {fileID: 1641184543692147332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3189090562601541337
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2321025045050616803}
+    m_Modifications:
+    - target: {fileID: 3697418204921738759, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_Size.x
+      value: 32.10462
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697418204921738759, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_Size.y
+      value: 21.16872
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697418204921738759, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697418204921738759, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: musicKey
+      value: casino_ambient_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: stopMusicOnExit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: musicKeys.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: restartIfSameOnEnsure
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: 'musicKeys.Array.data[0]'
+      value: casino_ambient_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335800168945665093, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: 'musicKeys.Array.data[1]'
+      value: casino_ambient_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.205265
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.352419
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8949833580204055986, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+      propertyPath: m_Name
+      value: MusicTrigger
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+--- !u!4 &5101762543599125023 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7677783012321582278, guid: 456fb9c424c9ef54eb4d6dfc773b2cfd, type: 3}
+  m_PrefabInstance: {fileID: 3189090562601541337}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6412608309321828024
 PrefabInstance:
