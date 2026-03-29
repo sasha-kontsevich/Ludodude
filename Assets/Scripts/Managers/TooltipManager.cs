@@ -19,11 +19,13 @@ public class TooltipManager : MonoBehaviour
     public bool IsVisible { get; private set; }
 
     public string CurrentText { get; private set; } = string.Empty;
+    public bool IsPriorityLocked => Time.unscaledTime < _priorityLockUntil;
 
     /// <summary>Вызывается после любого изменения видимости или текста.</summary>
     public event Action<bool, string> StateChanged;
 
     private Coroutine _autoHideCoroutine;
+    private float _priorityLockUntil;
 
     private void Awake()
     {
@@ -47,6 +49,9 @@ public class TooltipManager : MonoBehaviour
 
     public void Show(string text)
     {
+        if (IsPriorityLocked)
+            return;
+
         StopAutoHide();
         CurrentText = text ?? string.Empty;
         IsVisible = true;
@@ -56,6 +61,9 @@ public class TooltipManager : MonoBehaviour
 
     public void Show(string text, float durationSeconds)
     {
+        if (IsPriorityLocked)
+            return;
+
         Show(text);
         if (durationSeconds <= 0f)
             return;
@@ -64,8 +72,25 @@ public class TooltipManager : MonoBehaviour
         _autoHideCoroutine = StartCoroutine(AutoHideAfter(durationSeconds));
     }
 
+    public void ShowPriority(string text, float durationSeconds)
+    {
+        float safeDuration = Mathf.Max(0.01f, durationSeconds);
+        _priorityLockUntil = Time.unscaledTime + safeDuration;
+
+        StopAutoHide();
+        CurrentText = text ?? string.Empty;
+        IsVisible = true;
+        RaiseStateChanged();
+        LogStateIfEnabled(nameof(ShowPriority));
+
+        _autoHideCoroutine = StartCoroutine(AutoHideAfter(safeDuration));
+    }
+
     public void Hide()
     {
+        if (IsPriorityLocked)
+            return;
+
         StopAutoHide();
         if (!IsVisible && string.IsNullOrEmpty(CurrentText))
             return;
@@ -80,6 +105,14 @@ public class TooltipManager : MonoBehaviour
     {
         yield return new WaitForSeconds(durationSeconds);
         _autoHideCoroutine = null;
+
+        if (IsPriorityLocked)
+        {
+            float remaining = Mathf.Max(0.01f, _priorityLockUntil - Time.unscaledTime);
+            _autoHideCoroutine = StartCoroutine(AutoHideAfter(remaining));
+            yield break;
+        }
+
         Hide();
     }
 

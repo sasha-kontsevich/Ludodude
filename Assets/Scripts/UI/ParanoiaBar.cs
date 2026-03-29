@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ParanoiaBar: MonoBehaviour
 {
-    
+
     [SerializeField] private Image fillerImage;
     [SerializeField] private TMP_Text textValue;
 
@@ -25,13 +25,19 @@ public class ParanoiaBar: MonoBehaviour
 
     public void Update()
     {
+        if (gm == null)
+            return;
+
+        float chance01 = gm.FakeWinChance01;
+        float chancePercent = gm.FakeWinChancePercent;
+
         if (textValue)
         {
-            textValue.text = $"{gm.Paranoia*100f} %";
+            textValue.text = $"{chancePercent:0.##}%";
         }
         if (fillerImage)
         {
-            fillerImage.fillAmount = gm.Paranoia;
+            fillerImage.fillAmount = chance01;
         }
     }
 

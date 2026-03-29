@@ -27,7 +27,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private string betFormat = "Ставка: {0:0.##}";
     [SerializeField] private string balanceFormat = "Баланс: {0:0.##}";
     [SerializeField] private string insufficientFundsFormat = "Недостаточно денег: не хватает {0:0.##}";
-    [SerializeField] private string fakeChanceFormat = "Шанс (фиктивный): {0:0.##}%";
+    [SerializeField] private string fakeChanceFormat = "";
 
     [Header("Visual reels (optional)")]
     [SerializeField] private bool preferVisualReels = true;
@@ -427,7 +427,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     private static string BuildLoseText(SpinResult result)
     {
         if (result != null && result.BetAmount < GameManager.WinUnlockBet)
-            return $"ПРОИГРЫШ (ставка ниже {GameManager.WinUnlockBet:0})";
+            return $"ПРОИГРЫШ";
 
         return "ПРОИГРЫШ";
     }

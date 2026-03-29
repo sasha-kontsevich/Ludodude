@@ -469,11 +469,13 @@ MonoBehaviour:
   symbolsLabel: {fileID: 4478576932200269257}
   balanceLabel: {fileID: 0}
   levelLabel: {fileID: 0}
+  fakeChanceLabel: {fileID: 0}
   betFormat: "\u0421\u0442\u0430\u0432\u043A\u0430: {0:0.##}"
   balanceFormat: "\u0411\u0430\u043B\u0430\u043D\u0441: {0:0.##}"
   insufficientFundsFormat: "\u041D\u0435\u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E
     \u0434\u0435\u043D\u0435\u0433: \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442
     {0:0.##}"
+  fakeChanceFormat: 
   preferVisualReels: 1
   showSingleVisualRow: 1
   hideSymbolsLabelWhenUsingVisualReels: 1
@@ -503,6 +505,7 @@ MonoBehaviour:
   reelStopDelay: 0.15
   spinFrameInterval: 0.045
   spinningOutcomeText: "\u041A\u0420\u0423\u0422\u0418\u041C..."
+  gambleSound: gambleTick
 --- !u!1 &4306957628170443560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,8 +1149,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

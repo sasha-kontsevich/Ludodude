@@ -17,7 +17,7 @@ public class GamblingMachineInteractable : MonoBehaviour
 
     [Header("Tooltip")]
     [SerializeField] private bool showTooltip = true;
-    [SerializeField] private string interactTooltipText = "Играть в слот";
+    [SerializeField] private string interactTooltipText = "Можно открыть слот-машину";
     [SerializeField] private string interactFallbackKeyLabel = "E";
 
     private TopDownPlayerController _playerInZone;
@@ -82,6 +82,7 @@ public class GamblingMachineInteractable : MonoBehaviour
             return;
 
         _playerInZone = player;
+        machineController?.SetBuffTarget(_playerInZone);
         ResolvePresenterIfNeeded();
     }
 
@@ -92,6 +93,7 @@ public class GamblingMachineInteractable : MonoBehaviour
             return;
 
         _playerInZone = null;
+        machineController?.SetBuffTarget(null);
         ResolvePresenterIfNeeded();
         if (panelPresenter == null || machineController == null)
             return;
@@ -177,24 +179,12 @@ public class GamblingMachineInteractable : MonoBehaviour
             return;
         }
 
-        var presenters = Object.FindObjectsByType<SlotMachinePanelPresenter>(FindObjectsSortMode.None);
+        var presenters = Object.FindObjectsByType<SlotMachinePanelPresenter>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
         if (presenters != null && presenters.Length > 0)
         {
             panelPresenter = presenters[0];
-            _warnedAboutMissingPresenter = false;
-            return;
-        }
-
-        // Includes inactive objects as well. Filter out prefab assets.
-        var allPresenters = Resources.FindObjectsOfTypeAll<SlotMachinePanelPresenter>();
-        for (int i = 0; i < allPresenters.Length; i++)
-        {
-            var p = allPresenters[i];
-            if (p == null)
-                continue;
-            if (!p.gameObject.scene.IsValid())
-                continue;
-            panelPresenter = p;
             _warnedAboutMissingPresenter = false;
             return;
         }
