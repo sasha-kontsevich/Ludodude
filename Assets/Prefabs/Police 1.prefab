@@ -113,10 +113,9 @@ MonoBehaviour:
   coolingArriveDistanceSlack: 0.35
   pursuitEndAction: 1
   spawnPoint: {fileID: 0}
-  teleportIfLootLostWithinDistance: 2.5
   debugLog: 0
   audioKey: 
-  aggroRadius: 5
+  aggroRadius: 15
 --- !u!58 &8300000000000000006
 CircleCollider2D:
   m_ObjectHideFlags: 0
