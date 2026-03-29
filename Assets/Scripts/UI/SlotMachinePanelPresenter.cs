@@ -22,10 +22,12 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private TMP_Text symbolsLabel;
     [SerializeField] private TMP_Text balanceLabel;
     [SerializeField] private TMP_Text levelLabel;
+    [SerializeField] private TMP_Text fakeChanceLabel;
 
     [SerializeField] private string betFormat = "Ставка: {0:0.##}";
     [SerializeField] private string balanceFormat = "Баланс: {0:0.##}";
     [SerializeField] private string insufficientFundsFormat = "Недостаточно денег: не хватает {0:0.##}";
+    [SerializeField] private string fakeChanceFormat = "Шанс (фиктивный): {0:0.##}%";
 
     [Header("Visual reels (optional)")]
     [SerializeField] private bool preferVisualReels = true;
@@ -161,8 +163,14 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         if (balanceLabel != null && GameManager.Instance != null)
             balanceLabel.text = string.Format(balanceFormat, GameManager.Instance.CasinoDeposit);
 
+        float fakeChancePercent = GameManager.Instance != null ? GameManager.Instance.FakeWinChancePercent : 0f;
+        if (fakeChanceLabel != null)
+            fakeChanceLabel.text = string.Format(fakeChanceFormat, fakeChancePercent);
+
         if (levelLabel != null)
-            levelLabel.text = $"Уровень: {machineController.CurrentLevel} | Мин. ставка: {machineController.CurrentMinBet:0.##}";
+            levelLabel.text = $"Уровень: {machineController.CurrentLevel} | Мин. ставка: {machineController.CurrentMinBet:0.##} | Шанс: {fakeChancePercent:0.##}%";
+        else if (fakeChanceLabel == null && outcomeLabel != null && !_isSpinAnimationRunning && string.IsNullOrEmpty(outcomeLabel.text))
+            outcomeLabel.text = string.Format(fakeChanceFormat, fakeChancePercent);
     }
 
     // Hook this to a button onClick in UI.
@@ -253,7 +261,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
 
         return result.IsWin
             ? $"ВЫИГРЫШ +{result.PayoutAmount:0.##}"
-            : "ПРОИГРЫШ";
+            : BuildLoseText(result);
     }
 
     private string BuildSymbolsText(SpinResult result)
@@ -411,6 +419,14 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             default:
                 return "неизвестная ошибка";
         }
+    }
+
+    private static string BuildLoseText(SpinResult result)
+    {
+        if (result != null && result.BetAmount < GameManager.WinUnlockBet)
+            return $"ПРОИГРЫШ (ставка ниже {GameManager.WinUnlockBet:0})";
+
+        return "ПРОИГРЫШ";
     }
 
     private bool TryGetVisualRowCount(int reels, int rows, out int visualRows)
