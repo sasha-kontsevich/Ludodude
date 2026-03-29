@@ -7,8 +7,13 @@ public class GamblingMachineController : MonoBehaviour
     [SerializeField] private SlotMachineConfig config;
     [SerializeField] private bool logSpinsToConsole;
     [SerializeField] private int currentLevel;
+    [Header("Win reward")]
+    [SerializeField] private Item winRewardItemPrefab;
+    [SerializeField] private Transform winRewardSpawnPoint;
+    [SerializeField] private bool spawnRewardOnlyOnce = true;
 
     private GamblingMachineEngine _engine;
+    private bool _rewardSpawned;
 
     public event Action<SpinResult> OnSpinCompleted;
 
@@ -67,6 +72,8 @@ public class GamblingMachineController : MonoBehaviour
 
         if (result.IsSuccess && result.PayoutAmount > 0f)
             gm.CasinoDeposit += result.PayoutAmount;
+
+        TrySpawnWinReward(result);
 
         if (result.IsSuccess)
             currentLevel = CurrentLevel + 1;
@@ -127,5 +134,25 @@ public class GamblingMachineController : MonoBehaviour
             $"bet={result.BetAmount:0.##}, minBet={result.MinBetForLevel:0.##}, level={result.LevelBefore}->{result.LevelAfter}, " +
             $"payout={result.PayoutAmount:0.##}, before={result.BalanceBefore:0.##}, after={result.BalanceAfter:0.##}",
             this);
+    }
+
+    private void TrySpawnWinReward(SpinResult result)
+    {
+        if (result == null || !result.IsSuccess || !result.IsWin)
+            return;
+        if (spawnRewardOnlyOnce && _rewardSpawned)
+            return;
+        if (winRewardItemPrefab == null)
+            return;
+
+        Vector3 spawnPos = winRewardSpawnPoint != null
+            ? winRewardSpawnPoint.position
+            : transform.position + Vector3.up * 1.25f;
+
+        var spawned = Instantiate(winRewardItemPrefab, spawnPos, Quaternion.identity);
+        if (spawned != null && spawned.GetComponent<WinGoalItem>() == null)
+            spawned.gameObject.AddComponent<WinGoalItem>();
+
+        _rewardSpawned = true;
     }
 }

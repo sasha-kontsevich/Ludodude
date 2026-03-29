@@ -40,7 +40,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [Header("Spin animation")]
     [SerializeField] private float spinAnimationDuration = 1.1f;
     [SerializeField] private float reelStopDelay = 0.15f;
-    [SerializeField] private float spinFrameInterval = 0.045f;
+    [SerializeField] private float spinFrameInterval = 0.075f;
     [SerializeField] private string spinningOutcomeText = "КРУТИМ...";
 
     private readonly StringBuilder _symbolsBuilder = new StringBuilder(64);
@@ -325,6 +325,9 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             else if (symbolsLabel != null)
                 symbolsLabel.text = BuildAnimatedSymbolsText(result, reels, rows, elapsed);
 
+            //start sound
+            AudioManager.Instance.PlaySound(gambleSound);
+
             yield return new WaitForSeconds(spinFrameInterval);
             elapsed += spinFrameInterval;
         }
@@ -335,7 +338,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         _spinRoutine = null;
         ApplyResultToLabels(result);
     }
-
+    [SerializeField] private string gambleSound = "gambleTick";
     private void ApplyResultToLabels(SpinResult result)
     {
         if (outcomeLabel != null)

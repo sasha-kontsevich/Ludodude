@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3111029796711189158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6080464005679086059}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6080464005679086059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111029796711189158}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.8, y: -3.02, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3131909657937598062}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3341017847118119021
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +344,7 @@ Transform:
   - {fileID: 2886455589243386938}
   - {fileID: 3627595378984276071}
   - {fileID: 4432991628855192319}
+  - {fileID: 6080464005679086059}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7314365242191021190
@@ -330,6 +362,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b06d1ed765274d044bae75efc007fde4, type: 2}
   logSpinsToConsole: 0
   currentLevel: 0
+  winRewardItemPrefab: {fileID: 1500067129198750086, guid: 762b9f46a6979c944bff149a50fd0f25, type: 3}
+  winRewardSpawnPoint: {fileID: 6080464005679086059}
+  spawnRewardOnlyOnce: 1
 --- !u!114 &558608129406056866
 MonoBehaviour:
   m_ObjectHideFlags: 0
