@@ -25,10 +25,10 @@ public class CreditBar: MonoBehaviour
 
     public void Update()
     {
-        float normalised = Mathf.Clamp01((float)gm.CasinoDeposit / gm.MaxDeposit);
+        float normalised = Mathf.Clamp01((float)gm.CasinoDeposit / gm.GoalDeposit);
         if (textValue)
         {
-            textValue.text = $"{gm.CasinoDeposit} / {gm.MaxDeposit}";
+            textValue.text = $"{gm.CasinoDeposit} / {gm.GoalDeposit}";
         }
         if (fillerImage)
         {

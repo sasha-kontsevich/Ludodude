@@ -15,6 +15,7 @@ public class GamblingMachineController : MonoBehaviour
     public SlotMachineConfig Config => config;
     public int CurrentLevel => Mathf.Max(0, currentLevel);
     public float CurrentMinBet => config == null ? 0f : config.GetMinBetForLevel(CurrentLevel);
+    public float CurrentSpinCost => Mathf.Max(0f, GameManager.Instance != null ? GameManager.Instance.GoalDeposit : 0f);
 
     private void Awake()
     {
@@ -38,30 +39,31 @@ public class GamblingMachineController : MonoBehaviour
     {
         var gm = GameManager.Instance;
         float balanceBefore = gm != null ? gm.CasinoDeposit : 0f;
-        float minBetForLevel = CurrentMinBet;
+        float requiredSpinCost = CurrentSpinCost;
 
-        SpinResult failResult = ValidateSpinRequest(gm, betAmount, balanceBefore, minBetForLevel);
+        SpinResult failResult = ValidateSpinRequest(gm, requiredSpinCost, balanceBefore);
         if (failResult != null)
         {
             RaiseSpinCompleted(failResult);
             return failResult;
         }
 
-        gm.CasinoDeposit -= betAmount;
+        gm.CasinoDeposit -= requiredSpinCost;
 
         var request = new SpinRequest
         {
-            BetAmount = betAmount,
+            BetAmount = requiredSpinCost,
             ReelCount = config.ReelCount,
             RowCount = config.RowCount,
             ForcedSeed = forcedSeed
         };
 
         var result = _engine.Spin(request);
-        result.BetAmount = betAmount;
+        gm.Level += 1;
+        result.BetAmount = requiredSpinCost;
         result.BalanceBefore = balanceBefore;
         result.LevelBefore = CurrentLevel;
-        result.MinBetForLevel = minBetForLevel;
+        result.MinBetForLevel = requiredSpinCost;
 
         if (result.IsSuccess && result.PayoutAmount > 0f)
             gm.CasinoDeposit += result.PayoutAmount;
@@ -75,44 +77,42 @@ public class GamblingMachineController : MonoBehaviour
         return result;
     }
 
-    private SpinResult ValidateSpinRequest(GameManager gm, float betAmount, float balanceBefore, float minBetForLevel)
+    private SpinResult ValidateSpinRequest(GameManager gm, float requiredSpinCost, float balanceBefore)
     {
         if (gm == null)
         {
-            return CreateFailedResult(SpinFailureReason.ConfigurationError, betAmount, balanceBefore, minBetForLevel);
+            return CreateFailedResult(SpinFailureReason.ConfigurationError, requiredSpinCost, balanceBefore);
         }
 
         if (_engine == null || config == null || !config.HasValidWeights())
         {
-            return CreateFailedResult(SpinFailureReason.ConfigurationError, betAmount, balanceBefore, minBetForLevel);
+            return CreateFailedResult(SpinFailureReason.ConfigurationError, requiredSpinCost, balanceBefore);
         }
 
-        float clampedBet = Mathf.Max(0f, betAmount);
-        float maxBetForLevel = Mathf.Max(minBetForLevel, config.MaxBet);
-        if (clampedBet < minBetForLevel || clampedBet > maxBetForLevel)
-            return CreateFailedResult(SpinFailureReason.InvalidBet, betAmount, balanceBefore, minBetForLevel);
+        if (requiredSpinCost <= 0f)
+            return CreateFailedResult(SpinFailureReason.InvalidBet, requiredSpinCost, balanceBefore);
 
-        if (gm.CasinoDeposit < clampedBet)
-            return CreateFailedResult(SpinFailureReason.InsufficientFunds, betAmount, balanceBefore, minBetForLevel);
+        if (gm.CasinoDeposit < requiredSpinCost)
+            return CreateFailedResult(SpinFailureReason.InsufficientFunds, requiredSpinCost, balanceBefore);
 
         return null;
     }
 
-    private SpinResult CreateFailedResult(SpinFailureReason reason, float betAmount, float balance, float minBetForLevel)
+    private SpinResult CreateFailedResult(SpinFailureReason reason, float spinCost, float balance)
     {
         return new SpinResult
         {
             IsSuccess = false,
             IsWin = false,
             FailureReason = reason,
-            BetAmount = Mathf.Max(0f, betAmount),
+            BetAmount = Mathf.Max(0f, spinCost),
             BalanceBefore = balance,
             BalanceAfter = balance,
             PayoutAmount = 0f,
             PayoutMultiplier = 0f,
             LevelBefore = CurrentLevel,
             LevelAfter = CurrentLevel,
-            MinBetForLevel = minBetForLevel
+            MinBetForLevel = Mathf.Max(0f, spinCost)
         };
     }
 
