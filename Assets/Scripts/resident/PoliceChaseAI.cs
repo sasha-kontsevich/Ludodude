@@ -238,27 +238,27 @@ public class PoliceChaseAI : MonoBehaviour
             return;
         }
 
-        Log($"Действие: ReturnToSpawn → {_spawnPosition}");
-        TeleportToSpawn();
+        Log($"Действие: Stop");
+        //TeleportToSpawn();
         _phase = PursuitPhase.Idle;
         _agent.isStopped = true;
         _agent.speed = chaseSpeed;
         _agent.acceleration = chaseAcceleration;
     }
 
-    private void TeleportToSpawn()
-    {
-        Vector3 pos = _spawnPosition;
+    // private void TeleportToSpawn()
+    // {
+    //     Vector3 pos = _spawnPosition;
 
-        var rb2d = GetComponent<Rigidbody2D>();
-        if (rb2d != null)
-        {
-            rb2d.position = new Vector2(pos.x, pos.y);
-            rb2d.linearVelocity = Vector2.zero;
-        }
+    //     var rb2d = GetComponent<Rigidbody2D>();
+    //     if (rb2d != null)
+    //     {
+    //         rb2d.position = new Vector2(pos.x, pos.y);
+    //         rb2d.linearVelocity = Vector2.zero;
+    //     }
 
-        _agent.Warp(pos);
-    }
+    //     _agent.Warp(pos);
+    // }
 
     private void Log(string message)
     {
