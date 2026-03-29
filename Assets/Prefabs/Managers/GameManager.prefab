@@ -88,27 +88,27 @@ MonoBehaviour:
   - key: footsteps_loop
     clip: {fileID: 8300000, guid: 0107b64f555156943afa8a3c137eb96a, type: 3}
     volume: 1
-    pitch: 1.52
+    pitch: 2
     loop: 1
   music:
   - key: casino_ambient_1
     clip: {fileID: 8300000, guid: b22c2784704b29c438c2b67ade199e38, type: 3}
-    volume: 0.536
+    volume: 0.383
     pitch: 0.6
     loop: 1
   - key: casino_ambient_2
     clip: {fileID: 8300000, guid: 027c6d865ae0e2847af4291ff896595c, type: 3}
-    volume: 0.464
+    volume: 0.373
     pitch: 0.67
     loop: 1
   - key: map_theme_1
     clip: {fileID: 8300000, guid: ff256527508685647bbd12635453b911, type: 3}
-    volume: 0.603
+    volume: 0.411
     pitch: 0.6
     loop: 1
   - key: map_theme_2
     clip: {fileID: 8300000, guid: de8194e1a7c280d4d8e8a8d177c15c29, type: 3}
-    volume: 0.484
+    volume: 0.373
     pitch: 0.66
     loop: 1
   - key: map_theme_3
