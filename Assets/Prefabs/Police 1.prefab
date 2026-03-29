@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 5021255259790434698, guid: 470c189f9da6f9b4090ba6f2a43dd193, type: 3}
+  m_Sprite: {fileID: -6111400071633600405, guid: acf4251647f24ba4cadcb121de860498, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 8300000000000000006}
   - component: {fileID: 8300000000000000007}
   m_Layer: 0
-  m_Name: Police
+  m_Name: Police 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,7 +206,6 @@ MonoBehaviour:
   spawnPoint: {fileID: 0}
   teleportIfLootLostWithinDistance: 2.5
   debugLog: 0
-  aggroRadius: 15
 --- !u!58 &8300000000000000006
 CircleCollider2D:
   m_ObjectHideFlags: 0
