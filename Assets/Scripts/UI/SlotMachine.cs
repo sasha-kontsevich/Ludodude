@@ -10,6 +10,8 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     [Range(0f, 1f)]
     public float threshold = 0.2f;
+    [Range(0f, 1f)]
+    [SerializeField] private float maxPullWhenInsufficientFunds = 0.78f;
     private float percent = 0f; 
     private bool reachedBottom = false;
     private bool dragging = false;
@@ -99,8 +101,14 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
     public void OnDrag(PointerEventData eventData)
     {
         if(!dragging || reachedBottom) return;
-        percent = GetPercent(eventData);
+        float requestedPercent = GetPercent(eventData);
+        bool canAffordSpin = CanAffordSpin();
+        float blockedLimit = Mathf.Clamp01(Mathf.Min(maxPullWhenInsufficientFunds, 1f - threshold - 0.01f));
+        percent = canAffordSpin ? requestedPercent : Mathf.Min(requestedPercent, blockedLimit);
         UpdateSprite(percent);
+
+        if (!canAffordSpin)
+            return;
 
         if (!reachedBottom && percent >= 1f-threshold)
         {
@@ -200,6 +208,15 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         }
 
         targetImage.color = baseColor;
+    }
+
+    private bool CanAffordSpin()
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm == null)
+            return false;
+
+        return gm.CasinoDeposit >= gm.GoalDeposit;
     }
 
     private void PlayParticles()
