@@ -23,12 +23,15 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private TMP_Text balanceLabel;
     [SerializeField] private TMP_Text levelLabel;
 
-    [SerializeField] private string betFormat = "Bet: {0:0.##}";
-    [SerializeField] private string balanceFormat = "Balance: {0:0.##}";
+    [SerializeField] private string betFormat = "Ставка: {0:0.##}";
+    [SerializeField] private string balanceFormat = "Баланс: {0:0.##}";
+    [SerializeField] private string insufficientFundsFormat = "Недостаточно денег: не хватает {0:0.##}";
 
     [Header("Visual reels (optional)")]
     [SerializeField] private bool preferVisualReels = true;
+    [SerializeField] private bool showSingleVisualRow = true;
     [SerializeField] private bool hideSymbolsLabelWhenUsingVisualReels = true;
+    [SerializeField] private bool hideUnusedVisualCells = true;
     [SerializeField] private Image[] reelCells;
     [SerializeField] private SlotSymbolSpriteEntry[] symbolSprites;
 
@@ -36,7 +39,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private float spinAnimationDuration = 1.1f;
     [SerializeField] private float reelStopDelay = 0.15f;
     [SerializeField] private float spinFrameInterval = 0.045f;
-    [SerializeField] private string spinningOutcomeText = "SPIN...";
+    [SerializeField] private string spinningOutcomeText = "КРУТИМ...";
 
     private readonly StringBuilder _symbolsBuilder = new StringBuilder(64);
     private SpinResult _queuedSpinResult;
@@ -69,11 +72,13 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             panelRoot = gameObject;
 
         RefreshSymbolsLabelVisibility();
+        InitializeVisualReels();
     }
 
     private void OnValidate()
     {
         RefreshSymbolsLabelVisibility();
+        InitializeVisualReels();
     }
 
     private void OnDestroy()
@@ -156,7 +161,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             balanceLabel.text = string.Format(balanceFormat, GameManager.Instance.CasinoDeposit);
 
         if (levelLabel != null)
-            levelLabel.text = $"Level: {machineController.CurrentLevel} | Min bet: {machineController.CurrentMinBet:0.##}";
+            levelLabel.text = $"Уровень: {machineController.CurrentLevel} | Мин. ставка: {machineController.CurrentMinBet:0.##}";
     }
 
     // Hook this to a button onClick in UI.
@@ -198,6 +203,18 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         return machineController != null && !_isSpinAnimationRunning;
     }
 
+    public void ShowInsufficientFundsHint()
+    {
+        if (outcomeLabel == null || machineController == null)
+            return;
+
+        GameManager gm = GameManager.Instance;
+        float balance = gm != null ? gm.CasinoDeposit : 0f;
+        float required = machineController.CurrentSpinCost;
+        float shortage = Mathf.Max(0f, required - balance);
+        outcomeLabel.text = string.Format(insufficientFundsFormat, shortage);
+    }
+
     public float GetCurrentBet()
     {
         if (machineController == null)
@@ -220,14 +237,22 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     private string BuildOutcomeText(SpinResult result)
     {
         if (result == null)
-            return "No result";
+            return "Нет результата";
 
         if (!result.IsSuccess)
-            return $"Spin failed: {result.FailureReason}";
+        {
+            if (result.FailureReason == SpinFailureReason.InsufficientFunds)
+            {
+                float shortage = Mathf.Max(0f, result.BetAmount - result.BalanceBefore);
+                return string.Format(insufficientFundsFormat, shortage);
+            }
+
+            return $"Ошибка прокрута: {FormatFailureReason(result.FailureReason)}";
+        }
 
         return result.IsWin
-            ? $"WIN +{result.PayoutAmount:0.##}"
-            : "LOSE";
+            ? $"ВЫИГРЫШ +{result.PayoutAmount:0.##}"
+            : "ПРОИГРЫШ";
     }
 
     private string BuildSymbolsText(SpinResult result)
@@ -281,13 +306,13 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         int rows = machineController != null && machineController.Config != null
             ? Mathf.Max(1, machineController.Config.RowCount)
             : 3;
-        bool canUseVisualReels = CanUseVisualReels(reels, rows);
+        bool canUseVisualReels = TryGetVisualRowCount(reels, rows, out int visualRows);
 
         float elapsed = 0f;
         while (elapsed < spinAnimationDuration)
         {
             if (canUseVisualReels)
-                ApplyAnimatedVisualReels(result, reels, rows, elapsed);
+                ApplyAnimatedVisualReels(result, reels, rows, visualRows, elapsed);
             else if (symbolsLabel != null)
                 symbolsLabel.text = BuildAnimatedSymbolsText(result, reels, rows, elapsed);
 
@@ -314,9 +339,9 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             ? Mathf.Max(1, machineController.Config.RowCount)
             : 3;
 
-        if (CanUseVisualReels(reels, rows))
+        if (TryGetVisualRowCount(reels, rows, out int visualRows))
         {
-            ApplyFinalVisualReels(result, reels, rows);
+            ApplyFinalVisualReels(result, reels, rows, visualRows);
             return;
         }
 
@@ -372,20 +397,44 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         }
     }
 
-    private bool CanUseVisualReels(int reels, int rows)
+    private static string FormatFailureReason(SpinFailureReason reason)
     {
-        if (!preferVisualReels || reelCells == null)
-            return false;
-
-        int required = Mathf.Max(1, reels * rows);
-        return reelCells.Length >= required;
+        switch (reason)
+        {
+            case SpinFailureReason.InvalidBet:
+                return "некорректная ставка";
+            case SpinFailureReason.InsufficientFunds:
+                return "недостаточно средств";
+            case SpinFailureReason.ConfigurationError:
+                return "ошибка конфигурации";
+            default:
+                return "неизвестная ошибка";
+        }
     }
 
-    private void ApplyAnimatedVisualReels(SpinResult result, int reels, int rows, float elapsed)
+    private bool TryGetVisualRowCount(int reels, int rows, out int visualRows)
     {
+        visualRows = 0;
+        if (!preferVisualReels || reelCells == null || reels <= 0 || rows <= 0)
+            return false;
+
+        int maxRowsByCells = reelCells.Length / reels;
+        if (maxRowsByCells <= 0)
+            return false;
+
+        visualRows = Mathf.Min(rows, maxRowsByCells);
+        if (showSingleVisualRow)
+            visualRows = Mathf.Min(visualRows, 1);
+
+        return visualRows > 0;
+    }
+
+    private void ApplyAnimatedVisualReels(SpinResult result, int reels, int totalRows, int visualRows, float elapsed)
+    {
+        ApplyVisualCellVisibility(reels, visualRows);
         float totalStopSpan = reels * reelStopDelay;
 
-        for (int row = 0; row < rows; row++)
+        for (int row = 0; row < visualRows; row++)
         {
             for (int reel = 0; reel < reels; reel++)
             {
@@ -396,7 +445,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
                 float reelStopTime = Mathf.Max(0f, spinAnimationDuration - totalStopSpan + (reel * reelStopDelay));
                 bool reelStopped = elapsed >= reelStopTime;
                 SlotSymbolId symbol = reelStopped
-                    ? GetResultSymbol(result, reels, rows, row, reel)
+                    ? GetResultSymbol(result, reels, totalRows, visualRows, row, reel)
                     : _spinSymbols[Random.Range(0, _spinSymbols.Length)];
 
                 reelCells[index].sprite = GetSpriteForSymbol(symbol);
@@ -404,9 +453,10 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         }
     }
 
-    private void ApplyFinalVisualReels(SpinResult result, int reels, int rows)
+    private void ApplyFinalVisualReels(SpinResult result, int reels, int totalRows, int visualRows)
     {
-        for (int row = 0; row < rows; row++)
+        ApplyVisualCellVisibility(reels, visualRows);
+        for (int row = 0; row < visualRows; row++)
         {
             for (int reel = 0; reel < reels; reel++)
             {
@@ -414,7 +464,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
                 if (index < 0 || index >= reelCells.Length || reelCells[index] == null)
                     continue;
 
-                SlotSymbolId symbol = GetResultSymbol(result, reels, rows, row, reel);
+                SlotSymbolId symbol = GetResultSymbol(result, reels, totalRows, visualRows, row, reel);
                 reelCells[index].sprite = GetSpriteForSymbol(symbol);
             }
         }
@@ -459,7 +509,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             ? Mathf.Max(1, machineController.Config.RowCount)
             : 3;
 
-        return hideSymbolsLabelWhenUsingVisualReels && CanUseVisualReels(reels, rows);
+        return hideSymbolsLabelWhenUsingVisualReels && TryGetVisualRowCount(reels, rows, out _);
     }
 
     private void RefreshSymbolsLabelVisibility()
@@ -468,6 +518,84 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             return;
 
         symbolsLabel.gameObject.SetActive(!ShouldHideSymbolsLabel());
+    }
+
+    private void InitializeVisualReels()
+    {
+        int reels = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.ReelCount)
+            : 3;
+        int rows = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.RowCount)
+            : 3;
+
+        if (!TryGetVisualRowCount(reels, rows, out int visualRows))
+            return;
+
+        ApplyVisualCellVisibility(reels, visualRows);
+        int activeCells = Mathf.Min(reelCells.Length, reels * visualRows);
+        for (int i = 0; i < activeCells; i++)
+        {
+            if (reelCells[i] == null || reelCells[i].sprite != null)
+                continue;
+
+            SlotSymbolId symbol = _spinSymbols[i % _spinSymbols.Length];
+            reelCells[i].sprite = GetSpriteForSymbol(symbol);
+        }
+    }
+
+    private void ApplyVisualCellVisibility(int reels, int visualRows)
+    {
+        if (reelCells == null || reels <= 0 || visualRows <= 0)
+            return;
+
+        int activeCells = Mathf.Min(reelCells.Length, reels * visualRows);
+        for (int i = 0; i < reelCells.Length; i++)
+        {
+            Image cell = reelCells[i];
+            if (cell == null)
+                continue;
+
+            bool isActiveCell = i < activeCells;
+            if (!isActiveCell && hideUnusedVisualCells)
+            {
+                cell.sprite = null;
+                cell.color = new Color(cell.color.r, cell.color.g, cell.color.b, 0f);
+            }
+            else
+            {
+                cell.color = new Color(cell.color.r, cell.color.g, cell.color.b, 1f);
+            }
+        }
+    }
+
+    private SlotSymbolId GetResultSymbol(SpinResult result, int reels, int totalRows, int visualRows, int displayRow, int reel)
+    {
+        if (result == null || result.VisibleSymbols == null || result.VisibleSymbols.Length == 0)
+            return _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+        int sourceRow = GetSourceRowByPayline(result, totalRows, visualRows, displayRow);
+        int index = sourceRow * reels + reel;
+
+        if (index < 0 || index >= result.VisibleSymbols.Length)
+            return _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+        return result.VisibleSymbols[index];
+    }
+
+    private static int GetSourceRowByPayline(SpinResult result, int totalRows, int visualRows, int displayRow)
+    {
+        int maxRow = Mathf.Max(0, totalRows - 1);
+        int paylineRow = result != null && result.WinningRows != null && result.WinningRows.Length > 0
+            ? Mathf.Clamp(result.WinningRows[0], 0, maxRow)
+            : totalRows / 2;
+
+        int firstRow = paylineRow - (visualRows / 2);
+        int lastPossibleFirstRow = Mathf.Max(0, totalRows - visualRows);
+        firstRow = Mathf.Clamp(firstRow, 0, lastPossibleFirstRow);
+
+        int sourceRow = firstRow + displayRow;
+        return Mathf.Clamp(sourceRow, 0, maxRow);
     }
 
     [ContextMenu("Setup Visual Reels (3x3)")]

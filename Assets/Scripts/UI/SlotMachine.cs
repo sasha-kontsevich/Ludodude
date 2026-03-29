@@ -15,6 +15,7 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
     private float percent = 0f; 
     private bool reachedBottom = false;
     private bool dragging = false;
+    private bool insufficientFundsHintShown = false;
 
     [Header("Spin trigger")]
     [SerializeField] private SlotMachinePanelPresenter slotPanelPresenter;
@@ -96,6 +97,11 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         }
 
         UpdateSprite(percent);
+
+        if (!CanAffordSpin())
+            ShowInsufficientFundsHint();
+        else
+            insufficientFundsHintShown = false;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -108,7 +114,10 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         UpdateSprite(percent);
 
         if (!canAffordSpin)
+        {
+            ShowInsufficientFundsHint();
             return;
+        }
 
         if (!reachedBottom && percent >= 1f-threshold)
         {
@@ -217,6 +226,21 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
             return false;
 
         return gm.CasinoDeposit >= gm.GoalDeposit;
+    }
+
+    private void ShowInsufficientFundsHint()
+    {
+        if (insufficientFundsHintShown)
+            return;
+
+        if (slotPanelPresenter == null)
+            slotPanelPresenter = SlotMachinePanelPresenter.Instance;
+
+        if (slotPanelPresenter == null)
+            return;
+
+        slotPanelPresenter.ShowInsufficientFundsHint();
+        insufficientFundsHintShown = true;
     }
 
     private void PlayParticles()

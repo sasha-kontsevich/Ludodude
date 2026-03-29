@@ -10,7 +10,6 @@ public class GamblingMachineInteractable : MonoBehaviour
     [SerializeField] private GamblingMachineController machineController;
     [SerializeField] private Collider2D zoneTrigger;
     [SerializeField] private SlotMachinePanelPresenter panelPresenter;
-    [SerializeField] private bool showPanelOnEnter = false;
     [SerializeField] private bool hidePanelOnExit = true;
     [SerializeField] private bool openByInteract = true;
     [SerializeField] private bool togglePanelByInteract = true;
@@ -83,11 +82,6 @@ public class GamblingMachineInteractable : MonoBehaviour
 
         _playerInZone = player;
         ResolvePresenterIfNeeded();
-        if (panelPresenter == null || machineController == null || !showPanelOnEnter)
-            return;
-
-        panelPresenter.BindMachine(machineController);
-        panelPresenter.ShowPanel();
     }
 
     internal void HandleTriggerExit(Collider2D other)
@@ -115,6 +109,8 @@ public class GamblingMachineInteractable : MonoBehaviour
         if (_playerInZone == null)
         {
             HideTooltip();
+            // Prevent stale Interact press outside the zone from auto-opening on enter.
+            _interactPressedThisFrame = false;
             return;
         }
 
@@ -156,6 +152,7 @@ public class GamblingMachineInteractable : MonoBehaviour
         if (_interactAction != null)
             _interactAction.started -= OnInteractStarted;
         _playerMap?.Disable();
+        _interactPressedThisFrame = false;
         HideTooltip();
     }
 
