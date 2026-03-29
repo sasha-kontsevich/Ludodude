@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e6a8c0d2b4e6f8091a3c5d7e9f0b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoliceChaseAI
+  pointsObject: {fileID: 0}
   chaseSpeed: 4.5
   obstacleAvoidance: 4
   chaseAcceleration: 28
@@ -113,6 +114,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 0}
   teleportIfLootLostWithinDistance: 2.5
   debugLog: 0
+  aggroRadius: 15
 --- !u!58 &8300000000000000006
 CircleCollider2D:
   m_ObjectHideFlags: 0
