@@ -177,24 +177,12 @@ public class GamblingMachineInteractable : MonoBehaviour
             return;
         }
 
-        var presenters = Object.FindObjectsByType<SlotMachinePanelPresenter>(FindObjectsSortMode.None);
+        var presenters = Object.FindObjectsByType<SlotMachinePanelPresenter>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
         if (presenters != null && presenters.Length > 0)
         {
             panelPresenter = presenters[0];
-            _warnedAboutMissingPresenter = false;
-            return;
-        }
-
-        // Includes inactive objects as well. Filter out prefab assets.
-        var allPresenters = Resources.FindObjectsOfTypeAll<SlotMachinePanelPresenter>();
-        for (int i = 0; i < allPresenters.Length; i++)
-        {
-            var p = allPresenters[i];
-            if (p == null)
-                continue;
-            if (!p.gameObject.scene.IsValid())
-                continue;
-            panelPresenter = p;
             _warnedAboutMissingPresenter = false;
             return;
         }
