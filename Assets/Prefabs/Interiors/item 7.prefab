@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8441998450032478204}
   - component: {fileID: 6973453781020398105}
   m_Layer: 0
-  m_Name: Square
+  m_Name: "\u043F\u0430\u043B\u043A\u0430 \u0441 \u043B\u0430\u043C\u043F\u043E\u0439"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
