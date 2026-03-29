@@ -59,6 +59,7 @@ public class ItemCarrier : MonoBehaviour
 
     private InputActionMap _playerMap;
     private InputAction _interactAction;
+    private InputAction _dropAction;
     private Transform _stackRoot;
     private Item _pickupOutlineTarget;
     private Rigidbody2D _rb;
@@ -101,6 +102,7 @@ public class ItemCarrier : MonoBehaviour
         {
             _playerMap = inputActions.FindActionMap("Player");
             _interactAction = _playerMap?.FindAction("Interact");
+            _dropAction = _playerMap?.FindAction("Attack");
         }
     }
 
@@ -136,12 +138,16 @@ public class ItemCarrier : MonoBehaviour
         // Interact в проекте с интеракцией Hold: при коротком нажатии есть started, а performed — только после удержания.
         if (_interactAction != null)
             _interactAction.started += OnInteractStarted;
+        if (_dropAction != null)
+            _dropAction.started += OnDropStarted;
     }
 
     private void OnDisable()
     {
         if (_interactAction != null)
             _interactAction.started -= OnInteractStarted;
+        if (_dropAction != null)
+            _dropAction.started -= OnDropStarted;
         _playerMap?.Disable();
         ClearPickupOutline();
         if (pickupTooltipEnabled && TooltipManager.Instance != null)
@@ -199,11 +205,11 @@ public class ItemCarrier : MonoBehaviour
 
         Item best = FindBestPickupableInRange();
         if (best != null)
-        {
             PickUp(best);
-            return;
-        }
+    }
 
+    private void OnDropStarted(InputAction.CallbackContext _)
+    {
         DropLastCarriedItem();
     }
 

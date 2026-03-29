@@ -300,6 +300,9 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   moveSpeed: 10
   sprintMultiplier: 1.5
+  footstepsSoundKey: footsteps_loop
+  movementInputDeadzone: 0.1
+  anim: {fileID: 0}
 --- !u!114 &7712345678901234567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,8 +372,8 @@ MonoBehaviour:
   legacyMaxCarryCost: 21000
   pickupTrigger: {fileID: 4634451150398689811}
   dropOffset: {x: 0, y: -0.45}
-  carriedItemWorldHeight: 1
-  stackSpacingFactor: 0.52
+  carriedItemWorldHeight: 2
+  stackSpacingFactor: 0.7
   pickupArcDuration: 0.35
   pickupArcHeight: 0.35
   wobbleFrequency: 10
