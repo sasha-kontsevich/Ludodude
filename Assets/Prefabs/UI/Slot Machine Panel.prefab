@@ -117,7 +117,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: -111}
+  m_AnchoredPosition: {x: 30, y: -150}
   m_SizeDelta: {x: 280, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &336650331112745297
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3265596131197772498, guid: c9f92e08d86b144f9ad0e02f55c96388, type: 3}
+  m_Sprite: {fileID: 246423590139824233, guid: 6c76bbad42501a748bffd5c704572bf3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1252,7 +1252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 578, y: -423}
+  m_AnchoredPosition: {x: 497, y: -423}
   m_SizeDelta: {x: 529.82, y: 133.1877}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5248894321583308908
@@ -1534,7 +1534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 578, y: 65.997}
+  m_AnchoredPosition: {x: 495, y: 65.997}
   m_SizeDelta: {x: -1390.1714, y: -352.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &292561864294583079
@@ -1565,7 +1565,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 608914152837650199, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
+  m_Sprite: {fileID: -2342007782809590899, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1588,11 +1588,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelSpriteDrag
   sprites:
-  - {fileID: 608914152837650199, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -5914550601403262451, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: 6555062729566295660, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -7000341642967401305, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -1877996695553156753, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
+  - {fileID: -2342007782809590899, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 8613765430734606497, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 112074936869795182, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 5169790093697683235, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: -4947873606202103477, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
   threshold: 0.2
   maxPullWhenInsufficientFunds: 0.78
   slotPanelPresenter: {fileID: 2099345168312749093}
