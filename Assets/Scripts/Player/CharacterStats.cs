@@ -21,4 +21,22 @@ public class CharacterStats : MonoBehaviour
     public int MaxCarryCost => maxCarryCost;
     public float SpeedMultiplier => speedMultiplier;
     public float SellPriceMultiplier => sellPriceMultiplier;
+
+    public int AddMaxCarryCost(int amount)
+    {
+        maxCarryCost = Mathf.Max(0, maxCarryCost + amount);
+        return maxCarryCost;
+    }
+
+    public float AddSpeedMultiplier(float amount)
+    {
+        speedMultiplier = Mathf.Max(0f, speedMultiplier + amount);
+        return speedMultiplier;
+    }
+
+    public float AddSellPriceMultiplier(float amount)
+    {
+        sellPriceMultiplier = Mathf.Max(0f, sellPriceMultiplier + amount);
+        return sellPriceMultiplier;
+    }
 }
