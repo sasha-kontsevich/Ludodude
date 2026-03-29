@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8441998450032478204}
   - component: {fileID: 6413326416647832694}
   m_Layer: 0
-  m_Name: Square
+  m_Name: "\u0447\u0438\u043B\u0437\u043E\u043D\u0430"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,7 +139,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
