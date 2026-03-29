@@ -54,6 +54,8 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("{0} — имя объекта, {1} — стоимость (Item.Cost).")]
     [SerializeField] private string pickupTooltipTemplate = "Подобрать: {0} (стоимость: {1})";
     [SerializeField] private string pickupFallbackKeyLabel = "F";
+    [Tooltip("{0} — имя предмета, {1} — сколько не хватает грузоподъёмности.")]
+    [SerializeField] private string overweightTooltipTemplate = "Недостаточно грузоподъёмности для {0}: не хватает {1}";
     [Tooltip("{0} — количество предметов в стопке.")]
     [SerializeField] private string dropTooltipTemplate = "Бросить предмет ({0} шт.)";
     [SerializeField] private string dropFallbackKeyLabel = "Q";
@@ -209,7 +211,18 @@ public class ItemCarrier : MonoBehaviour
             tm.Show(msg);
         }
         else
-            tm.Hide();
+        {
+            Item tooHeavy = FindBestTooHeavyInRange();
+            if (tooHeavy != null)
+            {
+                int missing = GetMissingCarryCapacity(tooHeavy.Cost);
+                string msg = string.Format(overweightTooltipTemplate, tooHeavy.gameObject.name, missing);
+                msg = AppendActionHint(msg, pickupFallbackKeyLabel);
+                tm.Show(msg);
+            }
+            else
+                tm.Hide();
+        }
     }
 
     private static string AppendActionHint(string baseText, string actionLabel)
@@ -354,6 +367,15 @@ public class ItemCarrier : MonoBehaviour
         return CurrentCarriedCost + itemCost <= maxCarryCost;
     }
 
+    private int GetMissingCarryCapacity(int itemCost)
+    {
+        int maxCarryCost = _stats != null ? _stats.MaxCarryCost : legacyMaxCarryCost;
+        if (maxCarryCost <= 0)
+            return 0;
+
+        return Mathf.Max(0, CurrentCarriedCost + itemCost - maxCarryCost);
+    }
+
     public float GetSellPriceMultiplier()
     {
         if (_stats == null)
@@ -392,6 +414,30 @@ public class ItemCarrier : MonoBehaviour
 
         RefreshStackLayout();
         return true;
+    }
+
+    private Item FindBestTooHeavyInRange()
+    {
+        Item best = null;
+        float bestSqr = float.MaxValue;
+        Vector2 p = transform.position;
+
+        foreach (var item in _inRange)
+        {
+            if (item == null || item.IsCarried)
+                continue;
+            if (CanAddCost(item.Cost))
+                continue;
+
+            float sqr = ((Vector2)item.transform.position - p).sqrMagnitude;
+            if (sqr < bestSqr)
+            {
+                bestSqr = sqr;
+                best = item;
+            }
+        }
+
+        return best;
     }
 
     private Vector3 GetStackSlotBaseLocal(int index)
