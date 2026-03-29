@@ -1,6 +1,11 @@
 using System.Text;
 using TMPro;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [DisallowMultipleComponent]
 public class SlotMachinePanelPresenter : MonoBehaviour
@@ -21,9 +26,34 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     [SerializeField] private string betFormat = "Bet: {0:0.##}";
     [SerializeField] private string balanceFormat = "Balance: {0:0.##}";
 
+    [Header("Visual reels (optional)")]
+    [SerializeField] private bool preferVisualReels = true;
+    [SerializeField] private bool hideSymbolsLabelWhenUsingVisualReels = true;
+    [SerializeField] private Image[] reelCells;
+    [SerializeField] private SlotSymbolSpriteEntry[] symbolSprites;
+
+    [Header("Spin animation")]
+    [SerializeField] private float spinAnimationDuration = 1.1f;
+    [SerializeField] private float reelStopDelay = 0.15f;
+    [SerializeField] private float spinFrameInterval = 0.045f;
+    [SerializeField] private string spinningOutcomeText = "SPIN...";
+
     private readonly StringBuilder _symbolsBuilder = new StringBuilder(64);
+    private SpinResult _queuedSpinResult;
+    private bool _suppressImmediateUiUpdate;
+    private bool _isSpinAnimationRunning;
+    private Coroutine _spinRoutine;
+    private readonly SlotSymbolId[] _spinSymbols =
+    {
+        SlotSymbolId.Cherry,
+        SlotSymbolId.Lemon,
+        SlotSymbolId.Bell,
+        SlotSymbolId.Seven,
+        SlotSymbolId.Diamond
+    };
 
     public GamblingMachineController CurrentMachine => machineController;
+    public bool IsSpinAnimationRunning => _isSpinAnimationRunning;
 
     private void Awake()
     {
@@ -37,6 +67,13 @@ public class SlotMachinePanelPresenter : MonoBehaviour
 
         if (panelRoot == null)
             panelRoot = gameObject;
+
+        RefreshSymbolsLabelVisibility();
+    }
+
+    private void OnValidate()
+    {
+        RefreshSymbolsLabelVisibility();
     }
 
     private void OnDestroy()
@@ -66,6 +103,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             machineController.OnSpinCompleted -= OnSpinCompleted;
 
         machineController = machine;
+        RefreshSymbolsLabelVisibility();
 
         if (machineController != null && isActiveAndEnabled)
             machineController.OnSpinCompleted += OnSpinCompleted;
@@ -80,6 +118,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
             machineController.OnSpinCompleted -= OnSpinCompleted;
 
         machineController = null;
+        RefreshSymbolsLabelVisibility();
 
         if (clearResult)
             ClearResultLabels();
@@ -123,10 +162,40 @@ public class SlotMachinePanelPresenter : MonoBehaviour
     // Hook this to a button onClick in UI.
     public void SpinFromUi()
     {
-        if (machineController == null)
-            return;
+        TrySpinFromUi();
+    }
 
-        machineController.TrySpin(machineController.CurrentSpinCost);
+    public bool TrySpinFromUi()
+    {
+        if (machineController == null || _isSpinAnimationRunning)
+            return false;
+
+        _suppressImmediateUiUpdate = true;
+        _queuedSpinResult = null;
+
+        SpinResult result = machineController.TrySpin(machineController.CurrentSpinCost);
+        if (result == null)
+        {
+            _suppressImmediateUiUpdate = false;
+            return false;
+        }
+
+        if (!result.IsSuccess)
+        {
+            _suppressImmediateUiUpdate = false;
+            ApplyResultToLabels(result);
+            return false;
+        }
+
+        if (_spinRoutine != null)
+            StopCoroutine(_spinRoutine);
+        _spinRoutine = StartCoroutine(PlaySpinAnimation(_queuedSpinResult ?? result));
+        return true;
+    }
+
+    public bool CanSpinFromUi()
+    {
+        return machineController != null && !_isSpinAnimationRunning;
     }
 
     public float GetCurrentBet()
@@ -139,11 +208,13 @@ public class SlotMachinePanelPresenter : MonoBehaviour
 
     private void OnSpinCompleted(SpinResult result)
     {
-        if (outcomeLabel != null)
-            outcomeLabel.text = BuildOutcomeText(result);
+        if (_suppressImmediateUiUpdate)
+        {
+            _queuedSpinResult = result;
+            return;
+        }
 
-        if (symbolsLabel != null)
-            symbolsLabel.text = BuildSymbolsText(result);
+        ApplyResultToLabels(result);
     }
 
     private string BuildOutcomeText(SpinResult result)
@@ -184,8 +255,10 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         if (outcomeLabel != null)
             outcomeLabel.text = string.Empty;
 
-        if (symbolsLabel != null)
+        if (symbolsLabel != null && !ShouldHideSymbolsLabel())
             symbolsLabel.text = string.Empty;
+
+        ClearVisualReels();
     }
 
     private void EnsurePanelRoot()
@@ -193,4 +266,332 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         if (panelRoot == null)
             panelRoot = gameObject;
     }
+
+    private IEnumerator PlaySpinAnimation(SpinResult result)
+    {
+        _isSpinAnimationRunning = true;
+        _suppressImmediateUiUpdate = true;
+
+        if (outcomeLabel != null)
+            outcomeLabel.text = spinningOutcomeText;
+
+        int reels = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.ReelCount)
+            : 3;
+        int rows = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.RowCount)
+            : 3;
+        bool canUseVisualReels = CanUseVisualReels(reels, rows);
+
+        float elapsed = 0f;
+        while (elapsed < spinAnimationDuration)
+        {
+            if (canUseVisualReels)
+                ApplyAnimatedVisualReels(result, reels, rows, elapsed);
+            else if (symbolsLabel != null)
+                symbolsLabel.text = BuildAnimatedSymbolsText(result, reels, rows, elapsed);
+
+            yield return new WaitForSeconds(spinFrameInterval);
+            elapsed += spinFrameInterval;
+        }
+
+        _suppressImmediateUiUpdate = false;
+        _queuedSpinResult = null;
+        _isSpinAnimationRunning = false;
+        _spinRoutine = null;
+        ApplyResultToLabels(result);
+    }
+
+    private void ApplyResultToLabels(SpinResult result)
+    {
+        if (outcomeLabel != null)
+            outcomeLabel.text = BuildOutcomeText(result);
+
+        int reels = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.ReelCount)
+            : 3;
+        int rows = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.RowCount)
+            : 3;
+
+        if (CanUseVisualReels(reels, rows))
+        {
+            ApplyFinalVisualReels(result, reels, rows);
+            return;
+        }
+
+        if (symbolsLabel != null)
+            symbolsLabel.text = BuildSymbolsText(result);
+    }
+
+    private string BuildAnimatedSymbolsText(SpinResult result, int reels, int rows, float elapsed)
+    {
+        _symbolsBuilder.Clear();
+        float totalStopSpan = reels * reelStopDelay;
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int reel = 0; reel < reels; reel++)
+            {
+                float reelStopTime = Mathf.Max(0f, spinAnimationDuration - totalStopSpan + (reel * reelStopDelay));
+                bool reelStopped = elapsed >= reelStopTime;
+                SlotSymbolId symbol = reelStopped
+                    ? GetResultSymbol(result, reels, rows, row, reel)
+                    : _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+                _symbolsBuilder.Append(FormatSymbol(symbol));
+                _symbolsBuilder.Append(reel == reels - 1 ? '\n' : " | ");
+            }
+        }
+
+        return _symbolsBuilder.ToString();
+    }
+
+    private SlotSymbolId GetResultSymbol(SpinResult result, int reels, int rows, int row, int reel)
+    {
+        if (result == null || result.VisibleSymbols == null || result.VisibleSymbols.Length == 0)
+            return _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+        int index = row * reels + reel;
+        if (index < 0 || index >= result.VisibleSymbols.Length)
+            return _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+        return result.VisibleSymbols[index];
+    }
+
+    private static string FormatSymbol(SlotSymbolId symbol)
+    {
+        switch (symbol)
+        {
+            case SlotSymbolId.Cherry: return "CH";
+            case SlotSymbolId.Lemon: return "LM";
+            case SlotSymbolId.Bell: return "BL";
+            case SlotSymbolId.Seven: return "77";
+            case SlotSymbolId.Diamond: return "DM";
+            default: return "--";
+        }
+    }
+
+    private bool CanUseVisualReels(int reels, int rows)
+    {
+        if (!preferVisualReels || reelCells == null)
+            return false;
+
+        int required = Mathf.Max(1, reels * rows);
+        return reelCells.Length >= required;
+    }
+
+    private void ApplyAnimatedVisualReels(SpinResult result, int reels, int rows, float elapsed)
+    {
+        float totalStopSpan = reels * reelStopDelay;
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int reel = 0; reel < reels; reel++)
+            {
+                int index = row * reels + reel;
+                if (index < 0 || index >= reelCells.Length || reelCells[index] == null)
+                    continue;
+
+                float reelStopTime = Mathf.Max(0f, spinAnimationDuration - totalStopSpan + (reel * reelStopDelay));
+                bool reelStopped = elapsed >= reelStopTime;
+                SlotSymbolId symbol = reelStopped
+                    ? GetResultSymbol(result, reels, rows, row, reel)
+                    : _spinSymbols[Random.Range(0, _spinSymbols.Length)];
+
+                reelCells[index].sprite = GetSpriteForSymbol(symbol);
+            }
+        }
+    }
+
+    private void ApplyFinalVisualReels(SpinResult result, int reels, int rows)
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            for (int reel = 0; reel < reels; reel++)
+            {
+                int index = row * reels + reel;
+                if (index < 0 || index >= reelCells.Length || reelCells[index] == null)
+                    continue;
+
+                SlotSymbolId symbol = GetResultSymbol(result, reels, rows, row, reel);
+                reelCells[index].sprite = GetSpriteForSymbol(symbol);
+            }
+        }
+    }
+
+    private void ClearVisualReels()
+    {
+        if (reelCells == null)
+            return;
+
+        for (int i = 0; i < reelCells.Length; i++)
+        {
+            if (reelCells[i] == null)
+                continue;
+
+            reelCells[i].sprite = null;
+        }
+    }
+
+    private Sprite GetSpriteForSymbol(SlotSymbolId symbol)
+    {
+        if (symbolSprites == null || symbolSprites.Length == 0)
+            return null;
+
+        for (int i = 0; i < symbolSprites.Length; i++)
+        {
+            if (symbolSprites[i].Symbol != symbol)
+                continue;
+
+            return symbolSprites[i].Sprite;
+        }
+
+        return null;
+    }
+
+    private bool ShouldHideSymbolsLabel()
+    {
+        int reels = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.ReelCount)
+            : 3;
+        int rows = machineController != null && machineController.Config != null
+            ? Mathf.Max(1, machineController.Config.RowCount)
+            : 3;
+
+        return hideSymbolsLabelWhenUsingVisualReels && CanUseVisualReels(reels, rows);
+    }
+
+    private void RefreshSymbolsLabelVisibility()
+    {
+        if (symbolsLabel == null)
+            return;
+
+        symbolsLabel.gameObject.SetActive(!ShouldHideSymbolsLabel());
+    }
+
+    [ContextMenu("Setup Visual Reels (3x3)")]
+    private void SetupVisualReels()
+    {
+#if UNITY_EDITOR
+        Transform automat = FindChildRecursive(transform, "Automat");
+        if (automat == null)
+        {
+            Debug.LogWarning("SlotMachinePanelPresenter: Cannot find child 'Automat' for visual reels setup.", this);
+            return;
+        }
+
+        Undo.RecordObject(this, "Setup Visual Reels");
+
+        RectTransform gridRoot = EnsureReelsGrid(automat);
+        GridLayoutGroup grid = gridRoot.GetComponent<GridLayoutGroup>();
+        if (grid == null)
+            grid = Undo.AddComponent<GridLayoutGroup>(gridRoot.gameObject);
+
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = 3;
+        grid.spacing = new Vector2(8f, 8f);
+        grid.childAlignment = TextAnchor.MiddleCenter;
+        grid.startAxis = GridLayoutGroup.Axis.Horizontal;
+        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        grid.cellSize = new Vector2(88f, 68f);
+
+        EnsureReelCells(gridRoot);
+        CollectReelCellsFromGrid(gridRoot);
+
+        preferVisualReels = true;
+        hideSymbolsLabelWhenUsingVisualReels = true;
+        RefreshSymbolsLabelVisibility();
+
+        EditorUtility.SetDirty(this);
+        EditorUtility.SetDirty(gridRoot);
+        Debug.Log("SlotMachinePanelPresenter: visual reels grid has been set up. Assign symbol sprites in Symbol Sprites.", this);
+#else
+        Debug.LogWarning("SetupVisualReels is available only in Unity Editor.");
+#endif
+    }
+
+#if UNITY_EDITOR
+    private RectTransform EnsureReelsGrid(Transform automat)
+    {
+        const string reelsGridName = "ReelsGrid";
+        Transform existing = automat.Find(reelsGridName);
+        RectTransform gridRoot;
+        if (existing == null)
+        {
+            GameObject gridGo = new GameObject(reelsGridName, typeof(RectTransform));
+            Undo.RegisterCreatedObjectUndo(gridGo, "Create Reels Grid");
+            gridRoot = gridGo.GetComponent<RectTransform>();
+            gridRoot.SetParent(automat, false);
+        }
+        else
+        {
+            gridRoot = existing as RectTransform;
+        }
+
+        if (gridRoot == null)
+            gridRoot = automat.gameObject.AddComponent<RectTransform>();
+
+        gridRoot.anchorMin = new Vector2(0.5f, 0.5f);
+        gridRoot.anchorMax = new Vector2(0.5f, 0.5f);
+        gridRoot.pivot = new Vector2(0.5f, 0.5f);
+        gridRoot.anchoredPosition = new Vector2(-212f, 12f);
+        gridRoot.sizeDelta = new Vector2(280f, 220f);
+        gridRoot.localScale = Vector3.one;
+        return gridRoot;
+    }
+
+    private void EnsureReelCells(RectTransform gridRoot)
+    {
+        const int requiredCount = 9;
+        for (int i = gridRoot.childCount; i < requiredCount; i++)
+        {
+            string cellName = $"Cell_{i + 1:00}";
+            GameObject cellGo = new GameObject(cellName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            Undo.RegisterCreatedObjectUndo(cellGo, "Create Reel Cell");
+            RectTransform cellRect = cellGo.GetComponent<RectTransform>();
+            cellRect.SetParent(gridRoot, false);
+            cellRect.localScale = Vector3.one;
+
+            Image img = cellGo.GetComponent<Image>();
+            img.sprite = null;
+            img.color = Color.white;
+            img.preserveAspect = true;
+            img.raycastTarget = false;
+        }
+    }
+
+    private void CollectReelCellsFromGrid(RectTransform gridRoot)
+    {
+        reelCells = new Image[9];
+        int count = Mathf.Min(9, gridRoot.childCount);
+        for (int i = 0; i < count; i++)
+            reelCells[i] = gridRoot.GetChild(i).GetComponent<Image>();
+    }
+
+    private static Transform FindChildRecursive(Transform root, string childName)
+    {
+        if (root == null)
+            return null;
+
+        if (root.name == childName)
+            return root;
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform found = FindChildRecursive(root.GetChild(i), childName);
+            if (found != null)
+                return found;
+        }
+
+        return null;
+    }
+#endif
+}
+
+[System.Serializable]
+public struct SlotSymbolSpriteEntry
+{
+    public SlotSymbolId Symbol;
+    public Sprite Sprite;
 }

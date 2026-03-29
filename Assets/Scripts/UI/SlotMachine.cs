@@ -116,8 +116,8 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
             reachedBottom = true;
             dragging = false;
 
-            TriggerSpin();
-            PlayPullEffects();
+            if (TriggerSpin())
+                PlayPullEffects();
             returnHand();
         }
     }
@@ -147,7 +147,7 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         reachedBottom = false;
     }
 
-    private void TriggerSpin()
+    private bool TriggerSpin()
     {
         if (slotPanelPresenter == null)
             slotPanelPresenter = SlotMachinePanelPresenter.Instance;
@@ -155,10 +155,10 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         if (slotPanelPresenter == null)
         {
             Debug.LogWarning("PanelSpriteDrag: SlotMachinePanelPresenter is not assigned/found.");
-            return;
+            return false;
         }
 
-        slotPanelPresenter.SpinFromUi();
+        return slotPanelPresenter.TrySpinFromUi();
     }
 
     private void PlayPullEffects()
@@ -267,10 +267,11 @@ public class PanelSpriteDrag : MonoBehaviour, IPointerDownHandler, IDragHandler
         go.transform.localPosition = Vector3.zero;
 
         var ps = go.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         var main = ps.main;
+        main.playOnAwake = false;
         main.duration = 0.45f;
         main.loop = false;
-        main.playOnAwake = false;
         main.startLifetime = 0.35f;
         main.startSpeed = 140f;
         main.startSize = 7f;
