@@ -39,6 +39,17 @@ public class GamblingMachineController : MonoBehaviour
     public float CurrentMinBet => config == null ? 0f : config.GetMinBetForLevel(CurrentLevel);
     public float CurrentSpinCost => Mathf.Max(0f, GameManager.Instance != null ? GameManager.Instance.GoalDeposit : 0f);
 
+    public void SetBuffTarget(TopDownPlayerController player)
+    {
+        if (player == null)
+        {
+            _cachedPlayerStats = null;
+            return;
+        }
+
+        _cachedPlayerStats = player.GetComponent<CharacterStats>();
+    }
+
     private void Awake()
     {
         if (config == null)
@@ -231,7 +242,7 @@ public class GamblingMachineController : MonoBehaviour
             }
         }
 
-        TooltipManager.Instance?.Show(
+        TooltipManager.Instance?.ShowPriority(
             string.Format(defeatBuffTooltipFormat, deltaText, statName, currentValueText, _defeatCount),
             defeatBuffTooltipDuration);
     }
