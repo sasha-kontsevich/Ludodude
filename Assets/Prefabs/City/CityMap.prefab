@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 6444467358794707300}
   - component: {fileID: 9031516234468239654}
   - component: {fileID: 2966887651186659593}
+  - component: {fileID: 8269080634232412388}
   m_Layer: 0
   m_Name: Square (3)
   m_TagString: Untagged
@@ -338,6 +339,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &8269080634232412388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404183966063641842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &426223218099744995
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,6 +535,7 @@ GameObject:
   - component: {fileID: 2217000168084669377}
   - component: {fileID: 1645306408283793941}
   - component: {fileID: 3493347923172418984}
+  - component: {fileID: 1424692742204693539}
   m_Layer: 0
   m_Name: bench
   m_TagString: Untagged
@@ -912,6 +930,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &1424692742204693539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626115497437161262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &719378298272360269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,6 +1127,7 @@ GameObject:
   - component: {fileID: 6055226237666646341}
   - component: {fileID: 1549917907413043687}
   - component: {fileID: 6908160436369475536}
+  - component: {fileID: 2487146629556398749}
   m_Layer: 0
   m_Name: Square 2 (11)
   m_TagString: Untagged
@@ -1210,7 +1245,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.14543569, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1220,7 +1255,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.04, y: 4.84}
+  m_Size: {x: 2.7491286, y: 4.84}
   m_EdgeRadius: 0
 --- !u!114 &6908160436369475536
 MonoBehaviour:
@@ -1243,6 +1278,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &2487146629556398749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068620766028629957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1070656085083842201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1306,7 @@ GameObject:
   - component: {fileID: 4475135653172569566}
   - component: {fileID: 5906469303825666749}
   - component: {fileID: 5929856540659042165}
+  - component: {fileID: 7337877788434668983}
   m_Layer: 0
   m_Name: Square 2 (9)
   m_TagString: Untagged
@@ -1405,6 +1457,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &7337877788434668983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070656085083842201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1093976379996677970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,6 +1485,7 @@ GameObject:
   - component: {fileID: 6268481249570801606}
   - component: {fileID: 7380068844038009483}
   - component: {fileID: 1109520474023531397}
+  - component: {fileID: 4451797244606179063}
   m_Layer: 0
   m_Name: Square 2 (11)
   m_TagString: Untagged
@@ -1534,7 +1603,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.23633176, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1544,7 +1613,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.04, y: 4.84}
+  m_Size: {x: 2.5673366, y: 4.84}
   m_EdgeRadius: 0
 --- !u!114 &1109520474023531397
 MonoBehaviour:
@@ -1567,6 +1636,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &4451797244606179063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093976379996677970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1152755961087740387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,6 +1863,7 @@ GameObject:
   - component: {fileID: 755131296102377427}
   - component: {fileID: 6677056667634211156}
   - component: {fileID: 9206592774202809229}
+  - component: {fileID: 6350753921119472351}
   m_Layer: 0
   m_Name: tent
   m_TagString: Untagged
@@ -3166,6 +3252,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &6350753921119472351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697777119863296746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1867754656697894598
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,6 +3280,7 @@ GameObject:
   - component: {fileID: 4989199325794297165}
   - component: {fileID: 8846669024078685731}
   - component: {fileID: 3073009308581631782}
+  - component: {fileID: 517989147448356552}
   m_Layer: 0
   m_Name: Square (2)
   m_TagString: Untagged
@@ -3328,6 +3431,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &517989147448356552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867754656697894598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &2069112761540654614
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,6 +3458,7 @@ GameObject:
   - component: {fileID: 4127197755692208215}
   - component: {fileID: 6518950850777223452}
   - component: {fileID: 541818786814346655}
+  - component: {fileID: 2795863208110105421}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
@@ -3466,6 +3586,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2795863208110105421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069112761540654614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &2131588244050173437
 GameObject:
   m_ObjectHideFlags: 0
@@ -3571,6 +3707,8 @@ GameObject:
   - component: {fileID: 2512923641762864188}
   - component: {fileID: 4743326754564852581}
   - component: {fileID: 929107004417499513}
+  - component: {fileID: 3971081415260124238}
+  - component: {fileID: 7952381637803461846}
   m_Layer: 0
   m_Name: Square (4)
   m_TagString: Untagged
@@ -3721,6 +3859,38 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &3971081415260124238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2273552549511816526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
+--- !u!114 &7952381637803461846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2273552549511816526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46473933f25b94b4fb5bc246bb32fa52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  cost: 100
+  pickupOutlineColor: {r: 0.95, g: 0.85, b: 0.2, a: 1}
+  pickupOutlineWidth: 0.04
+  pickupOutlinePadding: 0.02
 --- !u!1 &2352550460612876210
 GameObject:
   m_ObjectHideFlags: 0
@@ -3732,6 +3902,7 @@ GameObject:
   - component: {fileID: 5597198813837102117}
   - component: {fileID: 8418423901700950080}
   - component: {fileID: 3600395034172457098}
+  - component: {fileID: 9010170092773592796}
   m_Layer: 0
   m_Name: wire
   m_TagString: Untagged
@@ -4820,6 +4991,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &9010170092773592796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2352550460612876210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &2418325702083840211
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,6 +6060,7 @@ GameObject:
   - component: {fileID: 1470894704329237961}
   - component: {fileID: 430640780156976575}
   - component: {fileID: 6803436575765589485}
+  - component: {fileID: 4380122592754764738}
   m_Layer: 0
   m_Name: wire
   m_TagString: Untagged
@@ -6971,6 +7159,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &4380122592754764738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3034798910098074280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &3056202137435053220
 GameObject:
   m_ObjectHideFlags: 0
@@ -7018,6 +7222,7 @@ GameObject:
   - component: {fileID: 2619144233197128989}
   - component: {fileID: 8239217252593740743}
   - component: {fileID: 8062782544509287420}
+  - component: {fileID: 9173065246814764018}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
@@ -7168,6 +7373,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &9173065246814764018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3190943829167670503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &3223019045655487197
 GameObject:
   m_ObjectHideFlags: 0
@@ -7456,6 +7677,7 @@ GameObject:
   - component: {fileID: 6043388588769548539}
   - component: {fileID: 6185032467215838875}
   - component: {fileID: 7262392264514255470}
+  - component: {fileID: 1828237504736337488}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -7606,6 +7828,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &1828237504736337488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943701855208419631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &3981214197028351215
 GameObject:
   m_ObjectHideFlags: 0
@@ -7617,6 +7855,7 @@ GameObject:
   - component: {fileID: 5330164837856734594}
   - component: {fileID: 5558574643951268335}
   - component: {fileID: 3108904726420959995}
+  - component: {fileID: 4595707071852908869}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -7744,6 +7983,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4595707071852908869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981214197028351215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &4090695675743179143
 GameObject:
   m_ObjectHideFlags: 0
@@ -7787,6 +8042,7 @@ GameObject:
   - component: {fileID: 7914795332211320263}
   - component: {fileID: 6303926485954295514}
   - component: {fileID: 9145976747029609521}
+  - component: {fileID: 7802794221289948033}
   m_Layer: 0
   m_Name: Square (3)
   m_TagString: Untagged
@@ -7937,6 +8193,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &7802794221289948033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4144076786360120434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &4310271467955752730
 GameObject:
   m_ObjectHideFlags: 0
@@ -7999,7 +8271,7 @@ Transform:
   m_GameObject: {fileID: 4371895371475031577}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -67.41464, y: -6.6748924, z: -10}
+  m_LocalPosition: {x: -75.80503, y: 14.415564, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8700,6 +8972,7 @@ GameObject:
   - component: {fileID: 8895996614794367780}
   - component: {fileID: 2648416360914143341}
   - component: {fileID: 2691015344747537358}
+  - component: {fileID: 8277715823832628367}
   m_Layer: 0
   m_Name: pillar
   m_TagString: Untagged
@@ -9692,6 +9965,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &8277715823832628367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099254442171448990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &5186917986086675170
 GameObject:
   m_ObjectHideFlags: 0
@@ -9704,6 +9993,7 @@ GameObject:
   - component: {fileID: 3559955649654662385}
   - component: {fileID: 4827224700465646774}
   - component: {fileID: 4032710498414643415}
+  - component: {fileID: 3060770129627761116}
   m_Layer: 0
   m_Name: Square 2 (8)
   m_TagString: Untagged
@@ -9821,7 +10111,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.2307005, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -9831,7 +10121,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.04, y: 4.84}
+  m_Size: {x: 2.578599, y: 4.84}
   m_EdgeRadius: 0
 --- !u!114 &4032710498414643415
 MonoBehaviour:
@@ -9854,6 +10144,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &3060770129627761116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5186917986086675170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &5339125074937135720
 GameObject:
   m_ObjectHideFlags: 0
@@ -9920,6 +10226,7 @@ GameObject:
   - component: {fileID: 3781074952201822809}
   - component: {fileID: 9198017397452361904}
   - component: {fileID: 8991855817742083946}
+  - component: {fileID: 3695917861804928032}
   m_Layer: 0
   m_Name: Square 2 (5)
   m_TagString: Untagged
@@ -10037,7 +10344,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.022602081}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -10047,7 +10354,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.8, y: 4.87}
+  m_Size: {x: 4.8, y: 4.8247957}
   m_EdgeRadius: 0
 --- !u!114 &8991855817742083946
 MonoBehaviour:
@@ -10070,6 +10377,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &3695917861804928032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5732561536634283152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &5751435343289386026
 GameObject:
   m_ObjectHideFlags: 0
@@ -10112,6 +10435,7 @@ GameObject:
   - component: {fileID: 5551662409649348267}
   - component: {fileID: 3820613113558332838}
   - component: {fileID: 8644194423689985492}
+  - component: {fileID: 1089694199519123592}
   m_Layer: 0
   m_Name: vendMachine
   m_TagString: Untagged
@@ -10197,7 +10521,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -10207,7 +10531,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -10280,10 +10604,10 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 1154294511, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 1888896211, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1910851681, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 3
@@ -10292,8 +10616,8 @@ Tilemap:
     m_Data: {fileID: 1131441552, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: 1124470184, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 1888896211, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 12
     m_Data:
@@ -10396,6 +10720,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &1089694199519123592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5753711441823022602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &5763459610127906693
 GameObject:
   m_ObjectHideFlags: 0
@@ -10577,6 +10917,7 @@ GameObject:
   - component: {fileID: 843194001933906764}
   - component: {fileID: 9123144026784400100}
   - component: {fileID: 2482845104565543966}
+  - component: {fileID: 7359116140249784958}
   m_Layer: 0
   m_Name: Square 2 (6)
   m_TagString: Untagged
@@ -10727,6 +11068,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &7359116140249784958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866489681022704202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &6052271815831728603
 GameObject:
   m_ObjectHideFlags: 0
@@ -10877,6 +11234,7 @@ GameObject:
   - component: {fileID: 2004980720113737410}
   - component: {fileID: 718455540198254058}
   - component: {fileID: 1800865698124333265}
+  - component: {fileID: 9055932823509624756}
   m_Layer: 0
   m_Name: Square 2 (2)
   m_TagString: Untagged
@@ -11027,6 +11385,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &9055932823509624756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6552386571987962628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &6553900714328049937
 GameObject:
   m_ObjectHideFlags: 0
@@ -11039,6 +11413,7 @@ GameObject:
   - component: {fileID: 8894607757190646684}
   - component: {fileID: 6341629235777670941}
   - component: {fileID: 6290434222637839829}
+  - component: {fileID: 5855440652292659673}
   m_Layer: 0
   m_Name: Square 2
   m_TagString: Untagged
@@ -11189,6 +11564,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &5855440652292659673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6553900714328049937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7000843706492094627
 GameObject:
   m_ObjectHideFlags: 0
@@ -11337,6 +11728,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7736562500884876229}
   - component: {fileID: 8294707310217587378}
+  - component: {fileID: 4470919656551906681}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -11378,6 +11770,22 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &4470919656551906681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018223995386604676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7191016432023169345
 GameObject:
   m_ObjectHideFlags: 0
@@ -11421,6 +11829,7 @@ GameObject:
   - component: {fileID: 4364339632173940758}
   - component: {fileID: 3482356040082494167}
   - component: {fileID: 288085338704526730}
+  - component: {fileID: 1977284050700500759}
   m_Layer: 0
   m_Name: Square 2 (1)
   m_TagString: Untagged
@@ -11571,6 +11980,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &1977284050700500759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719008647197757593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7741380772651992060
 GameObject:
   m_ObjectHideFlags: 0
@@ -11583,6 +12008,7 @@ GameObject:
   - component: {fileID: 6263561585267422417}
   - component: {fileID: 8777479047309082511}
   - component: {fileID: 7396981498172824169}
+  - component: {fileID: 5266414093863009710}
   m_Layer: 0
   m_Name: Square 2 (13)
   m_TagString: Untagged
@@ -11733,6 +12159,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &5266414093863009710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741380772651992060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7786650378545014804
 GameObject:
   m_ObjectHideFlags: 0
@@ -11745,6 +12187,7 @@ GameObject:
   - component: {fileID: 8839607671280638366}
   - component: {fileID: 4400937506120753964}
   - component: {fileID: 705957327608761820}
+  - component: {fileID: 762114850573504678}
   m_Layer: 0
   m_Name: Square 2 (3)
   m_TagString: Untagged
@@ -11895,6 +12338,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &762114850573504678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7786650378545014804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7862552896503136889
 GameObject:
   m_ObjectHideFlags: 0
@@ -11907,6 +12366,7 @@ GameObject:
   - component: {fileID: 4683277692966895699}
   - component: {fileID: 1345956991400311178}
   - component: {fileID: 2357883176294386447}
+  - component: {fileID: 8087427590467527679}
   m_Layer: 0
   m_Name: Square 2 (7)
   m_TagString: Untagged
@@ -12057,6 +12517,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &8087427590467527679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7862552896503136889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7924914994581794406
 GameObject:
   m_ObjectHideFlags: 0
@@ -12099,6 +12575,7 @@ GameObject:
   - component: {fileID: 7048372260885426833}
   - component: {fileID: 5196837169007531239}
   - component: {fileID: 7044619461440879808}
+  - component: {fileID: 7700371891864254952}
   m_Layer: 0
   m_Name: Square (2)
   m_TagString: Untagged
@@ -12226,6 +12703,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7700371891864254952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8008017061770268436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8072322694651944457
 GameObject:
   m_ObjectHideFlags: 0
@@ -12376,6 +12869,7 @@ GameObject:
   - component: {fileID: 5165418301302568689}
   - component: {fileID: 8276317144860812014}
   - component: {fileID: 7734295418628607567}
+  - component: {fileID: 5433930818577148515}
   m_Layer: 0
   m_Name: Square 2 (5)
   m_TagString: Untagged
@@ -12526,6 +13020,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &5433930818577148515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8078784433182917620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8097963301286546559
 GameObject:
   m_ObjectHideFlags: 0
@@ -12568,6 +13078,7 @@ GameObject:
   - component: {fileID: 1722666062832817309}
   - component: {fileID: 8280034576691126734}
   - component: {fileID: 2379002252674015472}
+  - component: {fileID: 6283387513735414552}
   m_Layer: 0
   m_Name: Asphalt
   m_TagString: Untagged
@@ -31522,8 +32033,8 @@ Tilemap:
   - first: {x: -39, y: 16, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 40
-      m_TileSpriteIndex: 40
+      m_TileIndex: 59
+      m_TileSpriteIndex: 59
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -68851,7 +69362,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 38ec872ecba61c24da1b23184c25f82b, type: 2}
   - m_RefCount: 7
     m_Data: {fileID: 11400000, guid: d71530f79ac197e4a908c0187e0f5a65, type: 2}
-  - m_RefCount: 171
+  - m_RefCount: 170
     m_Data: {fileID: 11400000, guid: f2cdd7d727fd03e46aa07fd21f3be89a, type: 2}
   - m_RefCount: 8
     m_Data: {fileID: 11400000, guid: 580308ad996e4a84eb98df8af1f9b8d8, type: 2}
@@ -68889,7 +69400,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 0da329527e631644d8041d866406c9b4, type: 2}
   - m_RefCount: 253
     m_Data: {fileID: 11400000, guid: 024f8526e37125643a5ec6b5f678704b, type: 2}
-  - m_RefCount: 3715
+  - m_RefCount: 3716
     m_Data: {fileID: 11400000, guid: eaa32f85fcb8deb459ebc6e456cf100a, type: 2}
   - m_RefCount: 10
     m_Data: {fileID: 11400000, guid: b1c2799bee9fa434baae3a850408bf8f, type: 2}
@@ -68994,7 +69505,7 @@ Tilemap:
     m_Data: {fileID: 639335739, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 7
     m_Data: {fileID: -2075910407, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
-  - m_RefCount: 171
+  - m_RefCount: 170
     m_Data: {fileID: 2033584098, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 8
     m_Data: {fileID: -375172888, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
@@ -69032,7 +69543,7 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 253
     m_Data: {fileID: 853074877, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
-  - m_RefCount: 3715
+  - m_RefCount: 3716
     m_Data: {fileID: -1466242924, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
   - m_RefCount: 20
     m_Data: {fileID: -815929775, guid: e09a4527e4f1271488fac58fca49fd4b, type: 3}
@@ -69230,6 +69741,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &6283387513735414552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8130940821598932389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8146379842488411111
 GameObject:
   m_ObjectHideFlags: 0
@@ -69242,6 +69769,7 @@ GameObject:
   - component: {fileID: 2413805056282718907}
   - component: {fileID: 2353053137722615508}
   - component: {fileID: 3752270865590387649}
+  - component: {fileID: 3168956735560671925}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -69392,6 +69920,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &3168956735560671925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146379842488411111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8298525079295002524
 GameObject:
   m_ObjectHideFlags: 0
@@ -69542,6 +70086,7 @@ GameObject:
   - component: {fileID: 2976804492654515693}
   - component: {fileID: 6190427981127213961}
   - component: {fileID: 8132793237784339677}
+  - component: {fileID: 8964314665314587567}
   m_Layer: 0
   m_Name: Square 2 (4)
   m_TagString: Untagged
@@ -69692,6 +70237,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &8964314665314587567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8308526910056298008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8482518816753619466
 GameObject:
   m_ObjectHideFlags: 0
@@ -69980,6 +70541,7 @@ GameObject:
   - component: {fileID: 6836567618930212449}
   - component: {fileID: 813515638971821114}
   - component: {fileID: 6378441877470586592}
+  - component: {fileID: 3581365838727521447}
   m_Layer: 0
   m_Name: Square 2 (12)
   m_TagString: Untagged
@@ -70130,6 +70692,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &3581365838727521447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8591818348171219443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8737058588224329279
 GameObject:
   m_ObjectHideFlags: 0
@@ -70395,6 +70973,7 @@ GameObject:
   - component: {fileID: 6850152255598472172}
   - component: {fileID: 8153579675284362376}
   - component: {fileID: 2914782329726632298}
+  - component: {fileID: 7419783824120892554}
   m_Layer: 0
   m_Name: Square 2 (14)
   m_TagString: Untagged
@@ -70545,6 +71124,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &7419783824120892554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8940317230501303275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &8998891039947264710
 GameObject:
   m_ObjectHideFlags: 0
@@ -70557,6 +71152,7 @@ GameObject:
   - component: {fileID: 6150715233800885285}
   - component: {fileID: 3671877268685571145}
   - component: {fileID: 785516377884195230}
+  - component: {fileID: 8168822642709808403}
   m_Layer: 0
   m_Name: Square 2 (3)
   m_TagString: Untagged
@@ -70707,6 +71303,22 @@ MonoBehaviour:
   fallbackGridColumns: 32
   fallbackCellSize: 2048
   isPlayerHome: 0
+--- !u!114 &8168822642709808403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8998891039947264710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &9112562199804076490
 GameObject:
   m_ObjectHideFlags: 0
