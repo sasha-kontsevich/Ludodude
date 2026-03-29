@@ -52,9 +52,6 @@ public class PoliceChaseAI : MonoBehaviour
     [Tooltip("Точка возврата после погони. Пусто — позиция при старте сцены.")]
     [SerializeField] private Transform spawnPoint;
 
-    [Tooltip("Если добыча пропала, а офицер ближе этого расстояния до игрока — контакт (кража триггером / догон) и телепорт на спавн.")]
-    [SerializeField] private float teleportIfLootLostWithinDistance = 2.5f;
-
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
 
