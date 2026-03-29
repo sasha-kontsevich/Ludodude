@@ -57,6 +57,9 @@ public class PoliceChaseAI : MonoBehaviour
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
 
+
+    [Header("Радиус обнаружения")]
+    [SerializeField] private float aggroRadius = 5f;
     public bool IsChasing => _phase == PursuitPhase.Chasing;
 
     private enum PursuitPhase
@@ -76,6 +79,13 @@ public class PoliceChaseAI : MonoBehaviour
     private Vector3 _coolingDestination;
     private float _coolingElapsed;
 
+    private bool IsPlayerInRange()
+    {
+        if (_player == null) return false;
+
+        float dist = Vector3.Distance(transform.position, _player.position);
+        return dist <= aggroRadius;
+    }
     private void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -146,6 +156,9 @@ public class PoliceChaseAI : MonoBehaviour
         if (!HasLoot())
             return;
 
+        if (!IsPlayerInRange())
+            return;
+
         BeginChase();
     }
 
@@ -160,6 +173,12 @@ public class PoliceChaseAI : MonoBehaviour
         if (PlayerShelterState.IsInsidePlayerHome)
         {
             EndPursuit("игрок в укрытии (дом)");
+            return;
+        }
+
+        if (!IsPlayerInRange())
+        {
+            EndPursuit("игрок вышел из радиуса");
             return;
         }
 
@@ -201,7 +220,7 @@ public class PoliceChaseAI : MonoBehaviour
             return;
 
         // если вдруг игрок появился с предметом → сразу в погоню
-        if (_player != null && PlayerOutOfShelter() && HasLoot())
+        if (_player != null && PlayerOutOfShelter() && HasLoot() && IsPlayerInRange())
         {
             BeginChase();
             return;
