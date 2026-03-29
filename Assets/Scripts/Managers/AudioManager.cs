@@ -4,9 +4,53 @@ using UnityEngine;
 
 /// <summary>
 /// Глобальный менеджер звуков и музыки с доступом по строковому ключу.
+///
+/// Быстрый гайд:
+/// 1) Добавьте AudioManager на объект сцены (обычно GameManager).
+/// 2) В инспекторе заполните:
+///    - sounds: SFX по ключам (one-shot и loop).
+///    - music: треки музыки по ключам.
+/// 3) Используйте API из других компонентов:
+///    - One-shot: AudioManager.Instance.PlaySound("ui_click");
+///    - Loop состояние (идемпотентно): AudioManager.Instance.SetLoopSoundPlaying("footsteps_loop", isMoving);
+///    - Музыка: AudioManager.Instance.PlayMusic("map_theme_1");
+///
+/// Рекомендации по конфигу:
+/// - key должен быть уникальным в пределах каталога.
+/// - pitch > 0 (если <= 0, будет использован fallback 1 с warning).
+/// - для длительных SFX (шаги/двигатель) ставьте loop = true.
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
+    /*
+     * API guide (в коде)
+     *
+     * Проверка ключей:
+     *   AudioManager.Instance.HasSound("ui_click");
+     *   AudioManager.Instance.HasMusic("map_theme_1");
+     *
+     * One-shot SFX:
+     *   AudioManager.Instance.PlaySound("ui_click");
+     *
+     * Loop SFX (рекомендуемый паттерн для состояний):
+     *   AudioManager.Instance.SetLoopSoundPlaying("footsteps_loop", isMoving);
+     *
+     * Loop SFX (ручное управление):
+     *   AudioManager.Instance.PlayLoopSound("engine_loop");
+     *   AudioManager.Instance.IsSoundPlaying("engine_loop");
+     *   AudioManager.Instance.StopSound("engine_loop");
+     *
+     * Music:
+     *   AudioManager.Instance.PlayMusic("map_theme_1");
+     *   AudioManager.Instance.PlayMusic("map_theme_1", restartIfSame: true);
+     *   AudioManager.Instance.StopMusic();
+     *
+     * Global:
+     *   AudioManager.Instance.SetMute(true);
+     *   AudioManager.Instance.SetMasterVolume(0.8f);
+     *   AudioManager.Instance.StopAllSounds();
+     */
+
     [Serializable]
     private class AudioEntry
     {
@@ -92,16 +136,22 @@ public class AudioManager : MonoBehaviour
             Instance = null;
     }
 
+    /// <summary>Проверка существования SFX ключа в каталоге sounds.</summary>
     public bool HasSound(string key)
     {
         return TryGetEntry(_soundByKey, key, out _);
     }
 
+    /// <summary>Проверка существования музыкального ключа в каталоге music.</summary>
     public bool HasMusic(string key)
     {
         return TryGetEntry(_musicByKey, key, out _);
     }
 
+    /// <summary>
+    /// Проигрывает SFX по ключу.
+    /// Если у записи loop=true, запускает/поддерживает loop-источник по ключу.
+    /// </summary>
     public bool PlaySound(string key)
     {
         if (!TryGetEntry(_soundByKey, key, out var entry))
@@ -129,6 +179,8 @@ public class AudioManager : MonoBehaviour
 
     /// <summary>
     /// Идемпотентное управление loop-звуком: удобно вызывать в Update/FixedUpdate.
+    /// shouldPlay=true эквивалентно <see cref="PlayLoopSound"/>, false — <see cref="StopSound"/>.
+    /// Возвращает true, если целевое состояние успешно применено.
     /// </summary>
     public bool SetLoopSoundPlaying(string key, bool shouldPlay)
     {
@@ -140,6 +192,7 @@ public class AudioManager : MonoBehaviour
 
     /// <summary>
     /// Явный запуск loop-звука по ключу.
+    /// Возвращает false, если ключ не найден или запись сконфигурирована как one-shot (loop=false).
     /// </summary>
     public bool PlayLoopSound(string key)
     {
@@ -158,6 +211,10 @@ public class AudioManager : MonoBehaviour
         return PlayLoopEntry(key.Trim(), entry);
     }
 
+    /// <summary>
+    /// Проигрывает музыку по ключу.
+    /// restartIfSame=false не перезапускает трек, если уже играет тот же clip.
+    /// </summary>
     public bool PlayMusic(string key, bool restartIfSame = false)
     {
         if (!TryGetEntry(_musicByKey, key, out var entry))
@@ -184,6 +241,7 @@ public class AudioManager : MonoBehaviour
         return true;
     }
 
+    /// <summary>Останавливает текущую музыку (musicSource).</summary>
     public void StopMusic()
     {
         if (musicSource != null)
@@ -191,6 +249,7 @@ public class AudioManager : MonoBehaviour
         _currentMusicEntryVolume = 1f;
     }
 
+    /// <summary>Останавливает музыку, one-shot канал и все активные loop-SFX.</summary>
     public void StopAllSounds()
     {
         if (soundSource != null)
@@ -201,6 +260,11 @@ public class AudioManager : MonoBehaviour
         _currentMusicEntryVolume = 1f;
     }
 
+    /// <summary>
+    /// Останавливает loop-SFX по ключу.
+    /// Для one-shot звуков (PlayOneShot) остановка по ключу не применяется.
+    /// Возвращает true, если loop-звук с таким ключом был активен и остановлен.
+    /// </summary>
     public bool StopSound(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
@@ -219,6 +283,10 @@ public class AudioManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Проверка, играет ли loop-SFX по указанному ключу.
+    /// Для one-shot звуков всегда будет false.
+    /// </summary>
     public bool IsSoundPlaying(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
