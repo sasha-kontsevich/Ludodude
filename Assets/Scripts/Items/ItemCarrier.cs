@@ -54,6 +54,9 @@ public class ItemCarrier : MonoBehaviour
     [Tooltip("{0} — имя объекта, {1} — стоимость (Item.Cost).")]
     [SerializeField] private string pickupTooltipTemplate = "Подобрать: {0} (стоимость: {1})";
     [SerializeField] private string pickupFallbackKeyLabel = "F";
+    [Tooltip("{0} — количество предметов в стопке.")]
+    [SerializeField] private string dropTooltipTemplate = "Бросить предмет ({0} шт.)";
+    [SerializeField] private string dropFallbackKeyLabel = "Q";
 
     private readonly List<Item> _carried = new List<Item>(8);
     private readonly HashSet<Item> _inRange = new HashSet<Item>();
@@ -169,8 +172,9 @@ public class ItemCarrier : MonoBehaviour
             _pickupOutlineTarget?.SetPickupHighlight(false);
             _pickupOutlineTarget = best;
             _pickupOutlineTarget?.SetPickupHighlight(true);
-            SyncPickupTooltip(best);
         }
+
+        SyncPickupTooltip(best);
 
         UpdatePickupArcAnimations();
         if (_carried.Count > 0)
@@ -190,23 +194,22 @@ public class ItemCarrier : MonoBehaviour
             return;
         }
 
+        if (_carried.Count > 0)
+        {
+            string msg = string.Format(dropTooltipTemplate, _carried.Count);
+            msg = AppendActionHint(msg, dropFallbackKeyLabel);
+            tm.Show(msg);
+            return;
+        }
+
         if (best != null)
         {
             string msg = string.Format(pickupTooltipTemplate, best.gameObject.name, best.Cost);
-            msg = AppendActionHint(msg, GetActionLabel(_pickupAction, pickupFallbackKeyLabel));
+            msg = AppendActionHint(msg, pickupFallbackKeyLabel);
             tm.Show(msg);
         }
         else
             tm.Hide();
-    }
-
-    private static string GetActionLabel(InputAction action, string fallback)
-    {
-        if (action == null)
-            return fallback;
-
-        string label = action.GetBindingDisplayString();
-        return string.IsNullOrWhiteSpace(label) ? fallback : label;
     }
 
     private static string AppendActionHint(string baseText, string actionLabel)

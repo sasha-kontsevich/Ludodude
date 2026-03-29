@@ -209,7 +209,7 @@ public class GamblingMachineInteractable : MonoBehaviour
         if (tm == null)
             return;
 
-        string hint = AppendActionHint(interactTooltipText, GetActionLabel(_interactAction, interactFallbackKeyLabel));
+        string hint = AppendActionHint(interactTooltipText, interactFallbackKeyLabel);
         tm.Show(hint);
         _tooltipShown = true;
     }
@@ -221,15 +221,6 @@ public class GamblingMachineInteractable : MonoBehaviour
 
         TooltipManager.Instance?.Hide();
         _tooltipShown = false;
-    }
-
-    private static string GetActionLabel(InputAction action, string fallback)
-    {
-        if (action == null)
-            return fallback;
-
-        string label = action.GetBindingDisplayString();
-        return string.IsNullOrWhiteSpace(label) ? fallback : label;
     }
 
     private static string AppendActionHint(string baseText, string actionLabel)

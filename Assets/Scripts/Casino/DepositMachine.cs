@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Зона сдачи предметов: подсказка при входе с полной стопкой, Interact снимает всё и зачисляет сумму в <see cref="GameManager.CasinoDeposit"/>.
@@ -19,7 +18,6 @@ public class DepositMachine : MonoBehaviour
     [Tooltip("{0} — количество предметов, {1} — итоговая сумма с учётом мультипликатора продажи.")]
     [SerializeField] private string depositTooltipTemplate = "Сдать предметы ({0} шт., сумма: {1})";
     [SerializeField] private string interactFallbackKeyLabel = "E";
-    [SerializeField] private InputActionAsset inputActions;
 
     [Tooltip("Задержка между стартом полёта следующего предмета (предыдущий может ещё лететь).")]
     [SerializeField] private float delayBetweenItems = 0.12f;
@@ -32,7 +30,6 @@ public class DepositMachine : MonoBehaviour
 
     private ItemCarrier _carrierInZone;
     private bool _depositTooltipShown;
-    private InputAction _interactAction;
 
     private readonly List<Item> _depositBuffer = new List<Item>(16);
 
@@ -46,12 +43,6 @@ public class DepositMachine : MonoBehaviour
     {
         if (zoneTrigger == null)
             zoneTrigger = GetComponent<Collider2D>();
-
-        if (inputActions != null)
-        {
-            var playerMap = inputActions.FindActionMap("Player");
-            _interactAction = playerMap?.FindAction("Interact");
-        }
 
         if (zoneTrigger != null && zoneTrigger.gameObject != gameObject)
         {
@@ -87,7 +78,7 @@ public class DepositMachine : MonoBehaviour
 
                 float total = rawSum * _carrierInZone.GetSellPriceMultiplier();
                 string text = string.Format(depositTooltipTemplate, count, total.ToString("0.##"));
-                text = AppendActionHint(text, GetActionLabel(_interactAction, interactFallbackKeyLabel));
+                text = AppendActionHint(text, interactFallbackKeyLabel);
                 tm.Show(text);
             }
 
@@ -217,15 +208,6 @@ public class DepositMachine : MonoBehaviour
 
         if (item != null)
             Destroy(item.gameObject);
-    }
-
-    private static string GetActionLabel(InputAction action, string fallback)
-    {
-        if (action == null)
-            return fallback;
-
-        string label = action.GetBindingDisplayString();
-        return string.IsNullOrWhiteSpace(label) ? fallback : label;
     }
 
     private static string AppendActionHint(string baseText, string actionLabel)
