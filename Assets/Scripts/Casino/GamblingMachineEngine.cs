@@ -37,7 +37,8 @@ public sealed class GamblingMachineEngine
             ? new System.Random(request.ForcedSeed.Value)
             : new System.Random(unchecked(Environment.TickCount * 397) ^ Guid.NewGuid().GetHashCode());
 
-        bool shouldWin = random.NextDouble() <= _config.VictoryChance;
+        bool canAttemptWin = result.BetAmount >= GameManager.WinUnlockBet;
+        bool shouldWin = canAttemptWin && random.NextDouble() <= _config.VictoryChance;
         FillGrid(result.VisibleSymbols, reels, rows, random);
 
         int centerRow = rows / 2;
