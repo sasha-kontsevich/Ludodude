@@ -10,6 +10,7 @@ public class TopDownPlayerController : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private string footstepsSoundKey = "footsteps_loop";
     [SerializeField] private float movementInputDeadzone = 0.1f;
+    [SerializeField] private Animator anim;
 
     private Rigidbody2D _rb;
     private InputActionMap _playerMap;
@@ -68,6 +69,7 @@ public class TopDownPlayerController : MonoBehaviour
         UpdateFootstepsLoop(isMoving);
         Vector2 delta = input * (speed * Time.fixedDeltaTime);
         _rb.MovePosition(_rb.position + delta);
+        runAnimation(isMoving);
     }
 
     private void UpdateFootstepsLoop(bool isMoving)
@@ -79,6 +81,16 @@ public class TopDownPlayerController : MonoBehaviour
         audioManager.SetLoopSoundPlaying(footstepsSoundKey, isMoving);
     }
 
+    private void runAnimation(bool ismov)
+    {
+        if(ismov) anim.SetBool("run", true);
+        else anim.SetBool("run", false);
+    }
+
+    private void grabAnimation()
+    {
+        anim.SetTrigger("grab");
+    }
     private void StopFootstepsLoop()
     {
         if (string.IsNullOrWhiteSpace(footstepsSoundKey))
