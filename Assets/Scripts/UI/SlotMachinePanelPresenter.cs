@@ -139,6 +139,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         EnsurePanelRoot();
         if (panelRoot != null)
             panelRoot.SetActive(true);
+        InitializeVisualReels();
     }
 
     public void HidePanel()
@@ -283,7 +284,7 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         if (symbolsLabel != null && !ShouldHideSymbolsLabel())
             symbolsLabel.text = string.Empty;
 
-        ClearVisualReels();
+        InitializeVisualReels();
     }
 
     private void EnsurePanelRoot()
