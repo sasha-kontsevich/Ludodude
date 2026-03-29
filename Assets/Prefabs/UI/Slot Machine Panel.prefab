@@ -541,4 +541,10 @@ MonoBehaviour:
   - {fileID: -7000341642967401305, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
   - {fileID: -1877996695553156753, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
   threshold: 0.2
+  slotPanelPresenter: {fileID: 0}
+  shakeTarget: {fileID: 0}
+  shakeDuration: 0.36
+  shakeMagnitude: 11.1
+  flashDuration: 0.32
+  flashColor: {r: 1, g: 0.92, b: 0.45, a: 1}
   frameDelay: 0.01

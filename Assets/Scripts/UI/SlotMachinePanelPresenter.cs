@@ -126,13 +126,15 @@ public class SlotMachinePanelPresenter : MonoBehaviour
         if (machineController == null)
             return;
 
-        machineController.TrySpin(GetCurrentBet());
+        machineController.TrySpin(machineController.CurrentSpinCost);
     }
 
     public float GetCurrentBet()
     {
-        float normalized = betDrag != null ? betDrag.value : 0f;
-        return machineController != null ? machineController.GetBetAmountByNormalized(normalized) : 0f;
+        if (machineController == null)
+            return 0f;
+
+        return machineController.CurrentSpinCost;
     }
 
     private void OnSpinCompleted(SpinResult result)

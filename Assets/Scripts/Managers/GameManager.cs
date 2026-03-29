@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum GameState
 {
@@ -10,6 +11,7 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
+    public int Level = 1;
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private bool persistBetweenScenes;
@@ -18,7 +20,9 @@ public class GameManager : MonoBehaviour
     public int Time = 0; //From 0 to 86400 = 24*60*60
 
     public float CasinoDeposit;
-    public float MaxDeposit = 1e3f;
+
+    public float GoalDeposit => 67f * Mathf.Pow(2f, Level);
+
     //percentage
     public float Paranoia = 0f;
 

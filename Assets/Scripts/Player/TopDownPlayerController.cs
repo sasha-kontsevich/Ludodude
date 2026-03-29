@@ -16,6 +16,7 @@ public class TopDownPlayerController : MonoBehaviour
     private InputActionMap _playerMap;
     private InputAction _moveAction;
     private InputAction _sprintAction;
+    private InputAction _interactAction;
     private CharacterStats _stats;
 
     public Vector2 MoveInput { get; private set; }
@@ -35,6 +36,7 @@ public class TopDownPlayerController : MonoBehaviour
 
         _playerMap = inputActions.FindActionMap("Player");
         _moveAction = _playerMap.FindAction("Move");
+        _interactAction = _playerMap?.FindAction("Interact");
         _sprintAction = _playerMap.FindAction("Sprint");
     }
 
@@ -70,6 +72,7 @@ public class TopDownPlayerController : MonoBehaviour
         Vector2 delta = input * (speed * Time.fixedDeltaTime);
         _rb.MovePosition(_rb.position + delta);
         runAnimation(isMoving);
+        OnGetACtion();
     }
 
     private void UpdateFootstepsLoop(bool isMoving)
@@ -86,11 +89,20 @@ public class TopDownPlayerController : MonoBehaviour
         if(ismov) anim.SetBool("run", true);
         else anim.SetBool("run", false);
     }
-
-    private void grabAnimation()
+    private void OnGetACtion()
     {
-        anim.SetTrigger("grab");
+        _playerMap?.Enable();
+        // Interact в проекте с интеракцией Hold: при коротком нажатии есть started, а performed — только после удержания.
+        if (_interactAction != null)
+            _interactAction.started += grabAnimation;
     }
+    private void grabAnimation(InputAction.CallbackContext _)
+    {
+        anim.SetBool("run", true);
+        anim.SetTrigger("grab");
+        anim.SetBool("run", false);
+    }
+
     private void StopFootstepsLoop()
     {
         if (string.IsNullOrWhiteSpace(footstepsSoundKey))
