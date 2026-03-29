@@ -52,13 +52,9 @@ public class PoliceChaseAI : MonoBehaviour
     [Tooltip("Точка возврата после погони. Пусто — позиция при старте сцены.")]
     [SerializeField] private Transform spawnPoint;
 
-    [Tooltip("Если добыча пропала, а офицер ближе этого расстояния до игрока — контакт (кража триггером / догон) и телепорт на спавн.")]
-    [SerializeField] private float teleportIfLootLostWithinDistance = 2.5f;
-
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
 
-    private AudioManager am;
    
     [SerializeField] private string audioKey;
 
@@ -113,11 +109,6 @@ public class PoliceChaseAI : MonoBehaviour
         else
         {
             Debug.Log("PointsObject не задан!", this);
-        }
-
-        if (am == null)
-        {
-            am = AudioManager.Instance;
         }
 
 
@@ -175,6 +166,9 @@ public class PoliceChaseAI : MonoBehaviour
 
     private void UpdateChasing()
     {
+
+        
+
         if (_player == null)
         {
 
@@ -194,23 +188,9 @@ public class PoliceChaseAI : MonoBehaviour
             return;
         }
 
-        
         if (!HasLoot())
         {
-            float distToPlayer = Vector3.Distance(transform.position, _player.position);
-            if (distToPlayer <= teleportIfLootLostWithinDistance)
-            {
-                EndPursuit($"добыча снята вблизи офицера (дистанция {distToPlayer:F2} ≤ {teleportIfLootLostWithinDistance})");
-                return;
-            }
-
-            Log("Игрок сбросил добычу вдали — замедление");
-            _coolingDestination = _agent.hasPath ? _agent.destination : transform.position;
-            _coolingElapsed = 0f;
-            _phase = PursuitPhase.CoolingDownAfterDrop;
-            _agent.isStopped = false;
-            _agent.stoppingDistance = Mathf.Max(0f, chaseStoppingDistance);
-            _agent.SetDestination(_coolingDestination);
+            EndPursuit($"добыча снята");
             return;
         }
 
@@ -297,12 +277,19 @@ public class PoliceChaseAI : MonoBehaviour
     {
         return _playerCarrier != null && _playerCarrier.CarriedItems.Count > 0;
     }
-
+    private bool _chaseSoundPlaying = false;
     private void BeginChase()
     {
         float dist = _player != null ? Vector3.Distance(transform.position, _player.position) : -1f;
         Log($"Начало погони: игрок с предметом, дистанция до цели {dist:F2}");
-        am.SetOutdoorMusicOverride(audioKey);
+        
+
+        if (!_chaseSoundPlaying)
+        {
+            Debug.Log("PLAY SOUND");
+            AudioManager.Instance.PlayLoopSound(audioKey);
+            _chaseSoundPlaying = true;
+        }
 
         _phase = PursuitPhase.Chasing;
         _agent.speed = chaseSpeed;
@@ -312,7 +299,15 @@ public class PoliceChaseAI : MonoBehaviour
 
     private void EndPursuit(string reason)
     {
-        am.ClearOutdoorMusicOverride();
+        Debug.Log("STOP");
+        if (_chaseSoundPlaying)
+        {
+            Debug.Log("STOP SOUND");
+            AudioManager.Instance.StopSound(audioKey);
+            _chaseSoundPlaying = false;
+        }
+        
+
         Log($"Конец погони: {reason}");
 
         if (pursuitEndAction == VillagerPursuitEndAction.DestroySelf)
@@ -322,7 +317,7 @@ public class PoliceChaseAI : MonoBehaviour
             return;
         }
 
-        Log($"Действие: Stop");
+        Log($"Действие: Stop chase");
         //TeleportToSpawn();
         _phase = PursuitPhase.Patrool;
         _agent.isStopped = true;
