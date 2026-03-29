@@ -53,12 +53,17 @@ public class ItemCarrier : MonoBehaviour
 
     [Tooltip("{0} — имя объекта, {1} — стоимость (Item.Cost).")]
     [SerializeField] private string pickupTooltipTemplate = "Подобрать: {0} (стоимость: {1})";
+    [SerializeField] private string pickupFallbackKeyLabel = "F";
+    [Tooltip("{0} — количество предметов в стопке.")]
+    [SerializeField] private string dropTooltipTemplate = "Бросить предмет ({0} шт.)";
+    [SerializeField] private string dropFallbackKeyLabel = "Q";
 
     private readonly List<Item> _carried = new List<Item>(8);
     private readonly HashSet<Item> _inRange = new HashSet<Item>();
 
     private InputActionMap _playerMap;
     private InputAction _interactAction;
+    private InputAction _pickupAction;
     private InputAction _dropAction;
     private Transform _stackRoot;
     private Item _pickupOutlineTarget;
@@ -102,6 +107,7 @@ public class ItemCarrier : MonoBehaviour
         {
             _playerMap = inputActions.FindActionMap("Player");
             _interactAction = _playerMap?.FindAction("Interact");
+            _pickupAction = _playerMap?.FindAction("Crouch");
             _dropAction = _playerMap?.FindAction("Attack");
         }
     }
@@ -138,6 +144,8 @@ public class ItemCarrier : MonoBehaviour
         // Interact в проекте с интеракцией Hold: при коротком нажатии есть started, а performed — только после удержания.
         if (_interactAction != null)
             _interactAction.started += OnInteractStarted;
+        if (_pickupAction != null)
+            _pickupAction.started += OnPickupStarted;
         if (_dropAction != null)
             _dropAction.started += OnDropStarted;
     }
@@ -146,6 +154,8 @@ public class ItemCarrier : MonoBehaviour
     {
         if (_interactAction != null)
             _interactAction.started -= OnInteractStarted;
+        if (_pickupAction != null)
+            _pickupAction.started -= OnPickupStarted;
         if (_dropAction != null)
             _dropAction.started -= OnDropStarted;
         _playerMap?.Disable();
@@ -162,8 +172,9 @@ public class ItemCarrier : MonoBehaviour
             _pickupOutlineTarget?.SetPickupHighlight(false);
             _pickupOutlineTarget = best;
             _pickupOutlineTarget?.SetPickupHighlight(true);
-            SyncPickupTooltip(best);
         }
+
+        SyncPickupTooltip(best);
 
         UpdatePickupArcAnimations();
         if (_carried.Count > 0)
@@ -183,13 +194,33 @@ public class ItemCarrier : MonoBehaviour
             return;
         }
 
+        if (_carried.Count > 0)
+        {
+            string msg = string.Format(dropTooltipTemplate, _carried.Count);
+            msg = AppendActionHint(msg, dropFallbackKeyLabel);
+            tm.Show(msg);
+            return;
+        }
+
         if (best != null)
         {
             string msg = string.Format(pickupTooltipTemplate, best.gameObject.name, best.Cost);
+            msg = AppendActionHint(msg, pickupFallbackKeyLabel);
             tm.Show(msg);
         }
         else
             tm.Hide();
+    }
+
+    private static string AppendActionHint(string baseText, string actionLabel)
+    {
+        if (string.IsNullOrWhiteSpace(actionLabel))
+            return baseText;
+        if (string.IsNullOrWhiteSpace(baseText))
+            return $"[{actionLabel}]";
+        if (baseText.Contains($"[{actionLabel}]") || baseText.Contains($"({actionLabel})"))
+            return baseText;
+        return $"{baseText} [{actionLabel}]";
     }
 
     private void ClearPickupOutline()
@@ -202,7 +233,10 @@ public class ItemCarrier : MonoBehaviour
     {
         if (DepositMachine.TryDeposit(this))
             return;
+    }
 
+    private void OnPickupStarted(InputAction.CallbackContext _)
+    {
         Item best = FindBestPickupableInRange();
         if (best != null)
             PickUp(best);

@@ -17,6 +17,7 @@ public class DepositMachine : MonoBehaviour
 
     [Tooltip("{0} — количество предметов, {1} — итоговая сумма с учётом мультипликатора продажи.")]
     [SerializeField] private string depositTooltipTemplate = "Сдать предметы ({0} шт., сумма: {1})";
+    [SerializeField] private string interactFallbackKeyLabel = "E";
 
     [Tooltip("Задержка между стартом полёта следующего предмета (предыдущий может ещё лететь).")]
     [SerializeField] private float delayBetweenItems = 0.12f;
@@ -76,7 +77,9 @@ public class DepositMachine : MonoBehaviour
                 }
 
                 float total = rawSum * _carrierInZone.GetSellPriceMultiplier();
-                tm.Show(string.Format(depositTooltipTemplate, count, total.ToString("0.##")));
+                string text = string.Format(depositTooltipTemplate, count, total.ToString("0.##"));
+                text = AppendActionHint(text, interactFallbackKeyLabel);
+                tm.Show(text);
             }
 
             _depositTooltipShown = true;
@@ -205,6 +208,17 @@ public class DepositMachine : MonoBehaviour
 
         if (item != null)
             Destroy(item.gameObject);
+    }
+
+    private static string AppendActionHint(string baseText, string actionLabel)
+    {
+        if (string.IsNullOrWhiteSpace(actionLabel))
+            return baseText;
+        if (string.IsNullOrWhiteSpace(baseText))
+            return $"[{actionLabel}]";
+        if (baseText.Contains($"[{actionLabel}]") || baseText.Contains($"({actionLabel})"))
+            return baseText;
+        return $"{baseText} [{actionLabel}]";
     }
 }
 

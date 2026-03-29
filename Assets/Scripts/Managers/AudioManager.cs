@@ -98,7 +98,14 @@ public class AudioManager : MonoBehaviour
     private readonly Dictionary<string, AudioEntry> _musicByKey = new Dictionary<string, AudioEntry>(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, LoopSoundState> _activeLoopSounds = new Dictionary<string, LoopSoundState>(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _warnedInvalidPitchKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private readonly List<string> _outdoorMusicOverrideKeys = new List<string>(4);
     private float _currentMusicEntryVolume = 1f;
+
+    /// <summary>
+    /// Событие изменения runtime override для уличной музыки.
+    /// На него могут подписываться триггеры музыкальных зон.
+    /// </summary>
+    public event Action OutdoorMusicOverrideChanged;
 
     private void Awake()
     {
@@ -297,6 +304,66 @@ public class AudioManager : MonoBehaviour
             return false;
 
         return loopState.Source != null && loopState.Source.isPlaying;
+    }
+
+    /// <summary>
+    /// Возвращает true, если через менеджер задан runtime override уличной музыки.
+    /// </summary>
+    public bool HasOutdoorMusicOverride => _outdoorMusicOverrideKeys.Count > 0;
+
+    /// <summary>
+    /// Текущий runtime override набор ключей уличной музыки.
+    /// Используется музыкальными зонами как приоритетный источник тем.
+    /// </summary>
+    public IReadOnlyList<string> OutdoorMusicOverrideKeys => _outdoorMusicOverrideKeys;
+
+    /// <summary>
+    /// Установить runtime override уличной музыки одним ключом.
+    /// </summary>
+    public void SetOutdoorMusicOverride(string key)
+    {
+        _outdoorMusicOverrideKeys.Clear();
+        if (!string.IsNullOrWhiteSpace(key))
+            _outdoorMusicOverrideKeys.Add(key.Trim());
+
+        OutdoorMusicOverrideChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Установить runtime override уличной музыки набором ключей.
+    /// Пустые/дублирующиеся ключи игнорируются.
+    /// </summary>
+    public void SetOutdoorMusicOverrideKeys(IEnumerable<string> keys)
+    {
+        _outdoorMusicOverrideKeys.Clear();
+        if (keys != null)
+        {
+            foreach (var key in keys)
+            {
+                if (string.IsNullOrWhiteSpace(key))
+                    continue;
+
+                var normalized = key.Trim();
+                if (_outdoorMusicOverrideKeys.Contains(normalized))
+                    continue;
+
+                _outdoorMusicOverrideKeys.Add(normalized);
+            }
+        }
+
+        OutdoorMusicOverrideChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Сбросить runtime override уличной музыки и вернуться к стандартным темам зон.
+    /// </summary>
+    public void ClearOutdoorMusicOverride()
+    {
+        if (_outdoorMusicOverrideKeys.Count == 0)
+            return;
+
+        _outdoorMusicOverrideKeys.Clear();
+        OutdoorMusicOverrideChanged?.Invoke();
     }
 
     public void SetMute(bool isMuted)

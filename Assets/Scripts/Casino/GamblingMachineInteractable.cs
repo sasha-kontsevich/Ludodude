@@ -18,6 +18,7 @@ public class GamblingMachineInteractable : MonoBehaviour
     [Header("Tooltip")]
     [SerializeField] private bool showTooltip = true;
     [SerializeField] private string interactTooltipText = "Играть в слот";
+    [SerializeField] private string interactFallbackKeyLabel = "E";
 
     private TopDownPlayerController _playerInZone;
     private bool _tooltipShown;
@@ -208,7 +209,8 @@ public class GamblingMachineInteractable : MonoBehaviour
         if (tm == null)
             return;
 
-        tm.Show(interactTooltipText);
+        string hint = AppendActionHint(interactTooltipText, interactFallbackKeyLabel);
+        tm.Show(hint);
         _tooltipShown = true;
     }
 
@@ -219,6 +221,17 @@ public class GamblingMachineInteractable : MonoBehaviour
 
         TooltipManager.Instance?.Hide();
         _tooltipShown = false;
+    }
+
+    private static string AppendActionHint(string baseText, string actionLabel)
+    {
+        if (string.IsNullOrWhiteSpace(actionLabel))
+            return baseText;
+        if (string.IsNullOrWhiteSpace(baseText))
+            return $"[{actionLabel}]";
+        if (baseText.Contains($"[{actionLabel}]") || baseText.Contains($"({actionLabel})"))
+            return baseText;
+        return $"{baseText} [{actionLabel}]";
     }
 }
 

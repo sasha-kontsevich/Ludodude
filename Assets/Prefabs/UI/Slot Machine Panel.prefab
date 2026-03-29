@@ -117,7 +117,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: -111}
+  m_AnchoredPosition: {x: 30, y: -150}
   m_SizeDelta: {x: 280, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &336650331112745297
@@ -469,8 +469,11 @@ MonoBehaviour:
   symbolsLabel: {fileID: 4478576932200269257}
   balanceLabel: {fileID: 0}
   levelLabel: {fileID: 0}
-  betFormat: "\u0421\u0442\u0430\u0432\u043a\u0430: {0:0.##}"
-  balanceFormat: "\u0411\u0430\u043b\u0430\u043d\u0441: {0:0.##}"
+  betFormat: "\u0421\u0442\u0430\u0432\u043A\u0430: {0:0.##}"
+  balanceFormat: "\u0411\u0430\u043B\u0430\u043D\u0441: {0:0.##}"
+  insufficientFundsFormat: "\u041D\u0435\u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E
+    \u0434\u0435\u043D\u0435\u0433: \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442
+    {0:0.##}"
   preferVisualReels: 1
   showSingleVisualRow: 1
   hideSymbolsLabelWhenUsingVisualReels: 1
@@ -499,7 +502,7 @@ MonoBehaviour:
   spinAnimationDuration: 1.1
   reelStopDelay: 0.15
   spinFrameInterval: 0.045
-  spinningOutcomeText: "\u041a\u0420\u0423\u0422\u0418\u041c..."
+  spinningOutcomeText: "\u041A\u0420\u0423\u0422\u0418\u041C..."
 --- !u!1 &4306957628170443560
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,7 +570,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3265596131197772498, guid: c9f92e08d86b144f9ad0e02f55c96388, type: 3}
+  m_Sprite: {fileID: 246423590139824233, guid: 6c76bbad42501a748bffd5c704572bf3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1168,8 +1171,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 23.88
+  m_fontSizeBase: 23.88
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1207,7 +1210,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -67.32676, y: 0, z: -36.49485, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1249,7 +1252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 578, y: -423}
+  m_AnchoredPosition: {x: 497, y: -423}
   m_SizeDelta: {x: 529.82, y: 133.1877}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5248894321583308908
@@ -1531,7 +1534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 578, y: 65.997}
+  m_AnchoredPosition: {x: 495, y: 65.997}
   m_SizeDelta: {x: -1390.1714, y: -352.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &292561864294583079
@@ -1562,7 +1565,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 608914152837650199, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
+  m_Sprite: {fileID: -2342007782809590899, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1585,11 +1588,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelSpriteDrag
   sprites:
-  - {fileID: 608914152837650199, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -5914550601403262451, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: 6555062729566295660, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -7000341642967401305, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
-  - {fileID: -1877996695553156753, guid: d7032e647def444c190c6ca8b8b68d56, type: 3}
+  - {fileID: -2342007782809590899, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 8613765430734606497, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 112074936869795182, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: 5169790093697683235, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
+  - {fileID: -4947873606202103477, guid: c7dbb702c6495d0499228c10aae759e0, type: 3}
   threshold: 0.2
   maxPullWhenInsufficientFunds: 0.78
   slotPanelPresenter: {fileID: 2099345168312749093}

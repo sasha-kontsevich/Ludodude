@@ -53,6 +53,13 @@ public class GlobalMusicTrigger2D : MonoBehaviour
         };
     }
 
+    private void OnEnable()
+    {
+        var audioManager = AudioManager.Instance;
+        if (audioManager != null)
+            audioManager.OutdoorMusicOverrideChanged += HandleOutdoorMusicOverrideChanged;
+    }
+
     private void Start()
     {
         TryRecoverPlayerInsideZone();
@@ -72,6 +79,10 @@ public class GlobalMusicTrigger2D : MonoBehaviour
 
     private void OnDisable()
     {
+        var audioManager = AudioManager.Instance;
+        if (audioManager != null)
+            audioManager.OutdoorMusicOverrideChanged -= HandleOutdoorMusicOverrideChanged;
+
         _playerInside = null;
         _selectedMusicKey = null;
         _warnedNoPlayableMusic = false;
@@ -193,17 +204,10 @@ public class GlobalMusicTrigger2D : MonoBehaviour
 
     private string SelectRandomMusicKey()
     {
-        var validKeys = new List<string>();
-        for (int i = 0; i < musicKeys.Count; i++)
-        {
-            if (string.IsNullOrWhiteSpace(musicKeys[i]))
-                continue;
-
-            validKeys.Add(musicKeys[i].Trim());
-        }
+        var validKeys = BuildCandidateKeys();
 
         if (validKeys.Count == 0)
-            return string.IsNullOrWhiteSpace(musicKey) ? string.Empty : musicKey.Trim();
+            return string.Empty;
 
         if (!avoidImmediateRepeat || validKeys.Count == 1 || string.IsNullOrWhiteSpace(_selectedMusicKey))
             return validKeys[Random.Range(0, validKeys.Count)];
@@ -223,10 +227,9 @@ public class GlobalMusicTrigger2D : MonoBehaviour
             return string.Empty;
 
         var playableKeys = new List<string>();
-        CollectPlayableKey(playableKeys, audioManager, musicKey);
-
-        for (int i = 0; i < musicKeys.Count; i++)
-            CollectPlayableKey(playableKeys, audioManager, musicKeys[i]);
+        var candidateKeys = BuildCandidateKeys();
+        for (int i = 0; i < candidateKeys.Count; i++)
+            CollectPlayableKey(playableKeys, audioManager, candidateKeys[i]);
 
         if (playableKeys.Count == 0)
             return string.Empty;
@@ -255,6 +258,44 @@ public class GlobalMusicTrigger2D : MonoBehaviour
             return;
 
         target.Add(key);
+    }
+
+    private List<string> BuildCandidateKeys()
+    {
+        var result = new List<string>();
+        var audioManager = AudioManager.Instance;
+
+        if (audioManager != null && audioManager.HasOutdoorMusicOverride)
+        {
+            var overrideKeys = audioManager.OutdoorMusicOverrideKeys;
+            for (int i = 0; i < overrideKeys.Count; i++)
+                AddUniqueKey(result, overrideKeys[i]);
+
+            return result;
+        }
+
+        AddUniqueKey(result, musicKey);
+        for (int i = 0; i < musicKeys.Count; i++)
+            AddUniqueKey(result, musicKeys[i]);
+
+        return result;
+    }
+
+    private static void AddUniqueKey(List<string> target, string rawKey)
+    {
+        if (string.IsNullOrWhiteSpace(rawKey))
+            return;
+
+        var key = rawKey.Trim();
+        if (!target.Contains(key))
+            target.Add(key);
+    }
+
+    private void HandleOutdoorMusicOverrideChanged()
+    {
+        _selectedMusicKey = SelectRandomMusicKey();
+        _warnedNoPlayableMusic = false;
+        EnsureMusicPlaying();
     }
 }
 

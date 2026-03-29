@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Полиция: преследует игрока по NavMesh, только пока игрок несёт хотя бы один предмет (<see cref="ItemCarrier"/>).
@@ -57,7 +58,9 @@ public class PoliceChaseAI : MonoBehaviour
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
 
-    private AudioManager ag;
+    private AudioManager am;
+   
+    [SerializeField] private string audioKey;
 
     [Header("Радиус обнаружения")]
     [SerializeField] private float aggroRadius = 5f;
@@ -112,9 +115,9 @@ public class PoliceChaseAI : MonoBehaviour
             Debug.Log("PointsObject не задан!", this);
         }
 
-        if (ag == null)
+        if (am == null)
         {
-            ag = AudioManager.Instance;
+            am = AudioManager.Instance;
         }
 
 
@@ -174,7 +177,7 @@ public class PoliceChaseAI : MonoBehaviour
     {
         if (_player == null)
         {
-            //To Do
+
             EndPursuit("игрок пропал (null)");
             return;
         }
@@ -191,6 +194,7 @@ public class PoliceChaseAI : MonoBehaviour
             return;
         }
 
+        
         if (!HasLoot())
         {
             float distToPlayer = Vector3.Distance(transform.position, _player.position);
@@ -298,6 +302,7 @@ public class PoliceChaseAI : MonoBehaviour
     {
         float dist = _player != null ? Vector3.Distance(transform.position, _player.position) : -1f;
         Log($"Начало погони: игрок с предметом, дистанция до цели {dist:F2}");
+        am.SetOutdoorMusicOverride(audioKey);
 
         _phase = PursuitPhase.Chasing;
         _agent.speed = chaseSpeed;
@@ -307,6 +312,7 @@ public class PoliceChaseAI : MonoBehaviour
 
     private void EndPursuit(string reason)
     {
+        am.ClearOutdoorMusicOverride();
         Log($"Конец погони: {reason}");
 
         if (pursuitEndAction == VillagerPursuitEndAction.DestroySelf)

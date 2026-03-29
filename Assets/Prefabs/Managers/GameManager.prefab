@@ -116,6 +116,11 @@ MonoBehaviour:
     volume: 0.484
     pitch: 1
     loop: 1
+  - key: chase_theme
+    clip: {fileID: 8300000, guid: 1e7b8d56eaf7ffa469b8e2c5c005b223, type: 3}
+    volume: 0.484
+    pitch: 1
+    loop: 1
 --- !u!82 &8115102207684818070
 AudioSource:
   m_ObjectHideFlags: 0
