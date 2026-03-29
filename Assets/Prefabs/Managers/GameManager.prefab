@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa817d2073e02f4d9907ce4b0f2f822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  Level: 1
   persistBetweenScenes: 0
   Time: 0
   CasinoDeposit: 0
-  MaxDeposit: 1000
   Paranoia: 0
 --- !u!114 &9116929397794350053
 MonoBehaviour:
@@ -94,27 +94,27 @@ MonoBehaviour:
   - key: casino_ambient_1
     clip: {fileID: 8300000, guid: b22c2784704b29c438c2b67ade199e38, type: 3}
     volume: 0.383
-    pitch: 0.6
+    pitch: 1
     loop: 1
   - key: casino_ambient_2
     clip: {fileID: 8300000, guid: 027c6d865ae0e2847af4291ff896595c, type: 3}
     volume: 0.373
-    pitch: 0.67
+    pitch: 1
     loop: 1
   - key: map_theme_1
     clip: {fileID: 8300000, guid: ff256527508685647bbd12635453b911, type: 3}
     volume: 0.411
-    pitch: 0.6
+    pitch: 1
     loop: 1
   - key: map_theme_2
     clip: {fileID: 8300000, guid: de8194e1a7c280d4d8e8a8d177c15c29, type: 3}
     volume: 0.373
-    pitch: 0.66
+    pitch: 1
     loop: 1
   - key: map_theme_3
     clip: {fileID: 8300000, guid: 3c9ba864a6ef26446bba4b6607797946, type: 3}
     volume: 0.484
-    pitch: 0.48
+    pitch: 1
     loop: 1
 --- !u!82 &8115102207684818070
 AudioSource:
