@@ -86,8 +86,14 @@ public class TopDownPlayerController : MonoBehaviour
 
     private void runAnimation(bool ismov)
     {
-        if(ismov) anim.SetBool("run", true);
-        else anim.SetBool("run", false);
+        if (ismov)
+        {
+            anim.SetBool("run", true);
+        }
+        else
+        {
+            anim.SetBool("run", false);
+        } 
     }
     private void OnGetACtion()
     {
