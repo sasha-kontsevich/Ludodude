@@ -57,6 +57,7 @@ public class PoliceChaseAI : MonoBehaviour
     [Header("Отладка")]
     [SerializeField] private bool debugLog;
 
+    private AudioManager ag;
 
     [Header("Радиус обнаружения")]
     [SerializeField] private float aggroRadius = 5f;
@@ -79,6 +80,7 @@ public class PoliceChaseAI : MonoBehaviour
     private Vector3 _coolingDestination;
     private float _coolingElapsed;
 
+    
     private bool IsPlayerInRange()
     {
         if (_player == null) return false;
@@ -109,6 +111,12 @@ public class PoliceChaseAI : MonoBehaviour
         {
             Debug.Log("PointsObject не задан!", this);
         }
+
+        if (ag == null)
+        {
+            ag = AudioManager.Instance;
+        }
+
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
@@ -166,6 +174,7 @@ public class PoliceChaseAI : MonoBehaviour
     {
         if (_player == null)
         {
+            //To Do
             EndPursuit("игрок пропал (null)");
             return;
         }
