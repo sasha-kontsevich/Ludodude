@@ -3250,6 +3250,7 @@ GameObject:
   - component: {fileID: 8846669024078685731}
   - component: {fileID: 3073009308581631782}
   - component: {fileID: 517989147448356552}
+  - component: {fileID: 6662887334018257587}
   m_Layer: 0
   m_Name: Square (2)
   m_TagString: Untagged
@@ -3416,6 +3417,22 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &6662887334018257587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867754656697894598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46473933f25b94b4fb5bc246bb32fa52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  cost: 1
+  pickupOutlineColor: {r: 0.95, g: 0.85, b: 0.2, a: 1}
+  pickupOutlineWidth: 0.04
+  pickupOutlinePadding: 0.02
 --- !u!1 &2069112761540654614
 GameObject:
   m_ObjectHideFlags: 0
@@ -7988,6 +8005,7 @@ GameObject:
   - component: {fileID: 6303926485954295514}
   - component: {fileID: 9145976747029609521}
   - component: {fileID: 7802794221289948033}
+  - component: {fileID: 8042137211198630688}
   m_Layer: 0
   m_Name: Square (3)
   m_TagString: Untagged
@@ -8154,6 +8172,22 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &8042137211198630688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4144076786360120434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46473933f25b94b4fb5bc246bb32fa52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  cost: 1
+  pickupOutlineColor: {r: 0.95, g: 0.85, b: 0.2, a: 1}
+  pickupOutlineWidth: 0.04
+  pickupOutlinePadding: 0.02
 --- !u!1 &4310271467955752730
 GameObject:
   m_ObjectHideFlags: 0
@@ -71985,6 +72019,10 @@ PrefabInstance:
       propertyPath: anim
       value: 
       objectReference: {fileID: 3896135700367659116}
+    - target: {fileID: 7456454018271902235, guid: 7ea68d3b018170b4cae92659a5e16364, type: 3}
+      propertyPath: field of view
+      value: 93
+      objectReference: {fileID: 0}
     - target: {fileID: 7992877714495936517, guid: 7ea68d3b018170b4cae92659a5e16364, type: 3}
       propertyPath: m_LocalScale.y
       value: 1

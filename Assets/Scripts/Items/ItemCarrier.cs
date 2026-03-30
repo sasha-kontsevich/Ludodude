@@ -183,7 +183,7 @@ public class ItemCarrier : MonoBehaviour
             RefreshStackLayout();
     }
 
-    private void SyncPickupTooltip(Item best)
+    /*private void SyncPickupTooltip(Item best)
     {
         var tm = TooltipManager.Instance;
         if (tm == null)
@@ -223,7 +223,62 @@ public class ItemCarrier : MonoBehaviour
             else
                 tm.Hide();
         }
+    }*/
+
+    private void SyncPickupTooltip(Item best)
+{
+    var tm = TooltipManager.Instance;
+    if (tm == null)
+        return;
+
+    if (!pickupTooltipEnabled)
+    {
+        // Скрываем только если текущая подсказка от нас
+        if (tm.CurrentText != null && tm.CurrentText.Contains("Подобрать") || tm.CurrentText.Contains("Бросить"))
+            tm.Hide();
+        return;
     }
+
+    // Если есть предметы в руках - показываем подсказку "Бросить"
+    if (_carried.Count > 0)
+    {
+        string msg = string.Format(dropTooltipTemplate, _carried.Count);
+        msg = AppendActionHint(msg, dropFallbackKeyLabel);
+        tm.Show(msg);
+        return;
+    }
+
+    // Если есть подбираемый предмет - показываем подсказку "Подобрать"
+    if (best != null)
+    {
+        string msg = string.Format(pickupTooltipTemplate, best.gameObject.name, best.Cost);
+        msg = AppendActionHint(msg, pickupFallbackKeyLabel);
+        tm.Show(msg);
+        return;
+    }
+
+    // Проверяем, есть ли слишком тяжелый предмет
+    Item tooHeavy = FindBestTooHeavyInRange();
+    if (tooHeavy != null)
+    {
+        int missing = GetMissingCarryCapacity(tooHeavy.Cost);
+        string msg = string.Format(overweightTooltipTemplate, tooHeavy.gameObject.name, missing);
+        msg = AppendActionHint(msg, pickupFallbackKeyLabel);
+        tm.Show(msg);
+        return;
+    }
+
+    // ⭐ КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: скрываем ТОЛЬКО если текущая подсказка от ItemCarrier
+    // Проверяем, что текущая подсказка относится к подбору/бросанию предметов
+    if (tm.CurrentText != null && 
+        (tm.CurrentText.Contains("Подобрать") || 
+         tm.CurrentText.Contains("Бросить") || 
+         tm.CurrentText.Contains("Недостаточно грузоподъёмности")))
+    {
+        tm.Hide();
+    }
+    // Если подсказка от другой системы (например, от слот-машины) - не трогаем её
+}
 
     private static string AppendActionHint(string baseText, string actionLabel)
     {

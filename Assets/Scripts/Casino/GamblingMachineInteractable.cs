@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -191,18 +192,37 @@ public class GamblingMachineInteractable : MonoBehaviour
     }
 
     private void ShowTooltip()
+{
+    if (_tooltipShown)
+        return;
+
+    var tm = TooltipManager.Instance;
+    if (tm == null)
+        return;
+
+    string hint = AppendActionHint(interactTooltipText, interactFallbackKeyLabel);
+    
+    // Добавляем небольшую задержку и показываем снова, если была приоритетная подсказка
+    if (tm.IsPriorityLocked)
     {
-        if (_tooltipShown)
-            return;
+        StartCoroutine(DelayedShowTooltip(hint));
+        return;
+    }
+    
+    tm.Show(hint);
+    _tooltipShown = true;
+}
 
-        var tm = TooltipManager.Instance;
-        if (tm == null)
-            return;
-
-        string hint = AppendActionHint(interactTooltipText, interactFallbackKeyLabel);
+private IEnumerator DelayedShowTooltip(string hint)
+{
+    yield return new WaitForSeconds(0.5f);
+    var tm = TooltipManager.Instance;
+    if (tm != null && !tm.IsPriorityLocked && _playerInZone != null)
+    {
         tm.Show(hint);
         _tooltipShown = true;
     }
+}
 
     private void HideTooltip()
     {
